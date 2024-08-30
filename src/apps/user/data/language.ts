@@ -7,6 +7,6 @@ export const LanguageData = [
   },
   {
     code: LanguageCode.JAPANESE,
-    name: '日本語',
+    name: 'Japanese',
   },
 ];
