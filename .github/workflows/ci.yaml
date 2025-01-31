@@ -16,7 +16,6 @@ jobs:
     # Step 1: Checkout the code
     - name: Checkout code
       uses: actions/checkout@v3
-      run: docker build . --file Dockerfile_prod --tag us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/banchanxanh/bcx-cms-api:latest
 
     # Step 2: Set up Google Cloud SDK
     - name: Set up Google Cloud SDK
@@ -29,6 +28,10 @@ jobs:
     # Step 3: Authenticate with GCP
     - name: Authenticate with GCP
       run: gcloud auth activate-service-account --key-file=${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+    # Step 4: Build the Docker image
+    - name: Build Docker image
+      run: docker build . --file Dockerfile_prod --tag us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/banchanxanh/bcx-cms-api:latest
 
     # - name: Push Docker image to GCP
     #     run: docker push us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/banchanxanh/bcx-cms-api:latest
