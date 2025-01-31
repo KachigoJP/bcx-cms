@@ -1,0 +1,53 @@
+services:
+  bcx-cms-api:
+    image: bcx-cms-api
+    container_name: bcx-cms-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: npm run start:dev
+    environment:
+      NODE_ENV: development
+      PORT: 5000
+      CORS_ORIGIN: '["https://4000-cs-114698834277-default.cs-asia-east1-vger.cloudshell.dev"]'
+      CORS_METHOD: '["GET","HEAD","PUT","PATCH","POST","DELETE","OPTIONS"]'
+      POSTGRESQL_HOST: "postgres"
+      POSTGRESQL_USERNAME: "postgres"
+      POSTGRESQL_PASSWORD: "1804"
+      POSTGRESQL_DATABASE_NAME: "banchanxanh"
+      POSTGRESQL_PORT: 5432
+      JWT_SECRET: "a@KKgRc@Iu59>42'=lXJ6W.P+*6F:6Hj"
+      JWT_EXPIRED_IN: "7d"
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/app
+      - /app/node_modules
+      
+  postgres:
+    image: postgres:14.13 # Use the desired PostgreSQL version
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1804
+      POSTGRES_DB: banchanxanh
+    ports:
+      - "5432:5432" # Expose PostgreSQL on port 5432
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data # Persist data
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin_container
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin_password
+    ports:
+      - "8080:80" # Expose pgAdmin on port 8080
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:

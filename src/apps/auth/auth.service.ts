@@ -1,7 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import * as moment from 'moment';
 import * as crypto from 'crypto';
-import { Response } from 'express';
+import { CookieOptions, Response } from 'express';
 import { pick } from 'lodash';
 import { JwtService } from '@nestjs/jwt';
 import {
@@ -35,7 +35,7 @@ import { UserEntity } from '../user/entities/user.entity';
 // import { TwoFaDto } from './dto/two-fa.dto';
 // import { RecaptchaService } from '@share/services/recaptcha/recaptcha.service';
 import { AUTH_ERROR, USER_ERROR } from '@messages/index';
-import { LOGIN_EXPIRED_MINUTES } from '@config/constants';
+import { LOGIN_EXPIRED_MINUTES, NODE_ENV, WILDCARD_DOMAIN } from '@config/constants';
 // import { ForgotPasswordDto } from './dto/forgotPassword.dto';
 // import { SendMailDto } from '../user/dto/send-mail.dto';
 // import { EmailType } from '@share/enum/email-type.enum';
@@ -89,16 +89,22 @@ export class AuthService {
       const userData = pick(user, ['id', 'email']);
       const token = await this.signPayload(userData);
 
-      response.cookie('token', token, {
+      const cookieOption: CookieOptions = {
         maxAge: LOGIN_EXPIRED_MINUTES * 60 * 1000,
-        httpOnly: true,
         secure: true,
+        sameSite: NODE_ENV === "production" ? "strict" : "none"
+      }
+      
+      if (NODE_ENV === "production") {
+        cookieOption.domain = WILDCARD_DOMAIN
+      }
+
+      response.cookie('token', token, {
+        ...cookieOption,
+        httpOnly: true,
       });
 
-      response.cookie('user', btoa(JSON.stringify(userData)), {
-        maxAge: LOGIN_EXPIRED_MINUTES * 60 * 1000,
-        secure: true,
-      });
+      response.cookie('user', btoa(JSON.stringify(userData)), cookieOption);
 
       return {
         message: 'Success',
@@ -127,7 +133,8 @@ export class AuthService {
   }
 
   async authenticate(email: string, password: string): Promise<any> {
-    const user = await this.userService.findUserByEmail(email);
+    console.log("email", email)
+    const user: UserEntity = await this.userService.findUserByEmail(email);
 
     if (!user) {
       throw new HttpException(
@@ -143,12 +150,12 @@ export class AuthService {
       );
     }
 
-    if (!user.isVerified) {
-      throw new HttpException(
-        USER_ERROR.USER_NOT_ACTIVE,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    // if (!user.isVerified) {
+    //   throw new HttpException(
+    //     USER_ERROR.USER_NOT_ACTIVE,
+    //     HttpStatus.BAD_REQUEST,
+    //   );
+    // }
 
     return user;
   }

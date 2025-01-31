@@ -1,0 +1,42 @@
+name: CI with GCP
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the code
+    - name: Checkout code
+      uses: actions/checkout@v3
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    # Step 2: Set up Google Cloud SDK
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+      with:
+        version: 'latest'
+        service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        project_id: banchanxanh
+
+    # Step 3: Authenticate with GCP
+    - name: Authenticate with GCP
+      run: gcloud auth activate-service-account --key-file=${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+    # Step 4: Run your CI tasks (e.g., build, test, deploy)
+    # - name: Run tests
+    #   run: |
+    #     echo "Running tests..."
+    #     # Add your test commands here, e.g., npm test, pytest, etc.
+
+    - name: Deploy to GCP (optional)
+      run: |
+        echo "Deploying to GCP..."
+        # Add your deployment commands here, e.g., gcloud app deploy

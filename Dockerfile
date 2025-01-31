@@ -1,20 +1,19 @@
-FROM node:20.17.0-alpine3.20
+FROM node:22.13.1-alpine3.20
 
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copies only package.json and yarn.lock before running yarn install. This enables better caching, as the yarn install step will only be re-run if these files have changed.
-COPY package.json ./
+# Copy package.json and package-lock.json to the working directory
+COPY package*.json ./
 
-# Uses the --frozen-lockfile option to ensure that yarn.lock is not updated during the install process
-# Adds the --production flag to only install production dependencies, skipping development dependencies
+# Install dependencies
 RUN npm install
 
+# Copy the rest of the application code to the working directory
 COPY . .
 
-RUN npm run build
+# Expose the port the app runs on
+EXPOSE 5000
 
-ENV PORT 3000
-EXPOSE 3000
-
-CMD ["npm", "start"]
-
+# Define the command to run the application
+CMD ["npm", "run", "start:dev"]

@@ -1,7 +1,8 @@
 import { config } from 'dotenv';
 
 config();
-
+export const NODE_ENV = process.env.NODE_ENV
+export const WILDCARD_DOMAIN = process.env.WILDCARD_DOMAIN
 export const MIN_PASSWORD_LENGTH = 6;
 export const MAX_PASSWORD_LENGTH = 35;
 export const LIMIT_PAGE = 25;

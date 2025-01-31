@@ -5,6 +5,7 @@
     "password": "$2b$12$M1vSIhc1ViAOH9D7OUmuWehpCvoTcJ/gbDThhZx59zXpq05wWfvia",
     "first_name": "Admin",
     "last_name": "User",
-    "is_verified": true
+    "is_verified": true,
+    "is_active": true
   }
 ]
