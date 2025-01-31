@@ -401,4 +401,4 @@ dist
 test/*
 !test/data
 package-lock.json
-pgdata
+postgres_data
