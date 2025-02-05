@@ -11,7 +11,7 @@ env:
   GCP_PROJECT_ID: banchanxanh
   GCP_REGION: us-central1
   GAR_REPOSITORY: development
-  IMAGE_NAME: bcx-cms-api-dev
+  IMAGE_NAME: bcx-cms-api
   IMAGE_TAG: latest
   GKE_CLUSTER: bcx-cluster
   GKE_REGION: us-central1-a
