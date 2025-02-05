@@ -62,11 +62,12 @@ jobs:
       with:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_REGION }}
+        project_id: ${{ env.GCP_PROJECT_ID }}
 
     # Step 3: Configure kubeconfig
     - name: Run Kubernetes config
       run: |
-        kubectl apply -f ./kubernetes/ --validate=false
+        kubectl apply -f ./kubernetes/
 
     # Step 4: Create Kubernetes Secret
     - name: Create Kubernetes Secret
