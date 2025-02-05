@@ -50,7 +50,7 @@ jobs:
       run: |
         docker buildx create --use
         docker buildx build --push \
-          -t ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+          -t ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
           . --file Dockerfile_prod
 
     - name: Set up GKE credentials
