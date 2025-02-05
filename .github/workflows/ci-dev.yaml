@@ -10,9 +10,9 @@ on:
 env:
   GCP_PROJECT_ID: banchanxanh
   GCP_REGION: us-central1
-  GAR_REPOSITORY: banchanxanh
+  GAR_REPOSITORY: development
   IMAGE_NAME: bcx-cms-api-dev
-  IMAGE_TAG: v1.0.0
+  IMAGE_TAG: latest
   GKE_CLUSTER: bcx-cluster
   GKE_REGION: us-central1-a
 
