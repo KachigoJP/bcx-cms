@@ -10,7 +10,7 @@ on:
 env:
   GCP_PROJECT_ID: banchanxanh
   GCP_REGION: us-central1
-  GAR_REPOSITORY: banchanxanh.com
+  GAR_REPOSITORY: banchanxanh
   IMAGE_NAME: bcx-cms-api
   IMAGE_TAG: latest
   GKE_CLUSTER: bcx-cluster
@@ -27,14 +27,6 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
-
-    - name: Cache Docker layers
-      uses: actions/cache@v4
-      with:
-        path: /tmp/.buildx-cache
-        key: ${{ runner.os }}-buildx-${{ github.sha }}
-        restore-keys: |
-          ${{ runner.os }}-buildx-
 
     - name: Authenticate to GCP
       uses: google-github-actions/auth@v2
@@ -59,8 +51,6 @@ jobs:
         docker buildx create --use
         docker buildx build --push \
           -t ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
-          --cache-from=type=local,src=/tmp/.buildx-cache \
-          --cache-to=type=local,dest=/tmp/.buildx-cache \
           . --file Dockerfile_prod
 
     - name: Set up GKE credentials
