@@ -61,9 +61,8 @@ jobs:
         kubectl set image deployment/bcx-cms-api \
         bcx-cms-api=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-
     - name: Deploy to GKE
-      run:kubectl rollout restart deployment worker
+      run: kubectl rollout restart deployment worker
 
     - name: Wait for Deployment Rollout
       run: |
