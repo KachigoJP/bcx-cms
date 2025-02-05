@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: bcx-cms-api-config
+data:
+  NODE_ENV: 'development'
+  PORT: '3000'
+  WILDCARD_DOMAIN: '.banchanxanh.com'
+  CORS_ORIGIN: '["http://localhost", "https://8080-cs-114698834277-default.cs-asia-east1-cats.cloudshell.dev/", "https://3000-cs-114698834277-default.cs-asia-east1-cats.cloudshell.dev/"]'
+  CORS_METHOD: '["GET","HEAD","PUT","PATCH","POST","DELETE","OPTIONS"]'
+  POSTGRESQL_HOST: 'cloudsql-proxy'
+  POSTGRESQL_USERNAME: 'bcx-dev'
+  POSTGRESQL_DATABASE_NAME: 'bcx-dev'
+  POSTGRESQL_PORT: '5432'
+  JWT_EXPIRED_IN: '7d'
