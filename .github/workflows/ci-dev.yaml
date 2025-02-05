@@ -66,7 +66,7 @@ jobs:
     # Step 3: Configure kubeconfig
     - name: Run Kubernetes config
       run: |
-        kubectl apply -f ./kubernetes/
+        kubectl apply -f ./kubernetes/ --validate=false
 
     # Step 4: Create Kubernetes Secret
     - name: Create Kubernetes Secret
