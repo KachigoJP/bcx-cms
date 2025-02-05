@@ -12,7 +12,7 @@ env:
   GCP_REGION: us-central1
   GAR_REPOSITORY: banchanxanh
   IMAGE_NAME: bcx-cms-api-dev
-  IMAGE_TAG: latest
+  IMAGE_TAG: v1.0.0
   GKE_CLUSTER: bcx-cluster
   GKE_REGION: us-central1-a
 
@@ -50,13 +50,13 @@ jobs:
           -t ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
           . --file Dockerfile_dev
 
-    - name: Remove old images with the same tag
-      run: |
-        gcloud artifacts docker images list ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
-          --format="get(digest)" | tail -n +2 | while read digest; do
-          gcloud artifacts docker images delete ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}@\$digest --quiet;
-        done
-        
+    # - name: Remove old images with the same tag
+    #   run: |
+    #     gcloud artifacts docker images list ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+    #       --format="get(digest)" | tail -n +2 | while read digest; do
+    #       gcloud artifacts docker images delete ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}@\$digest --quiet;
+    #     done
+
     # ********** KUBERNETES ***************
     # - name: Set up GKE credentials
     #   uses: google-github-actions/get-gke-credentials@v2
