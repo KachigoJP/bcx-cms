@@ -49,23 +49,19 @@ jobs:
         project_id: ${{ env.GCP_PROJECT_ID }}
 
     - name: "Get gcloud Info"
-      run: "gcloud info"
+      run: gcloud info
 
     - name: Configure Docker to use the gcloud command-line tool as a credential helper
       run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
 
-    - name: Build Docker Image
+    - name: Build Docker Image and Push to GCP Artifact Registry
       run: |
         docker buildx create --use
-        docker buildx build . --file Dockerfile_prod \
-          --tag ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
+        docker buildx build --push \
+          -t ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
           --cache-from=type=local,src=/tmp/.buildx-cache \
-          --cache-to=type=local,dest=/tmp/.buildx-cache
-
-        echo "IMAGE_URI=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}" >> $GITHUB_ENV
-
-    - name: push image to Google Artifact Repository
-      run: docker push ${{ env.IMAGE_URI }}
+          --cache-to=type=local,dest=/tmp/.buildx-cache \
+          . --file Dockerfile_prod
 
     - name: Set up GKE credentials
       uses: google-github-actions/get-gke-credentials@v2
