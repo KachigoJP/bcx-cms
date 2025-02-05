@@ -40,9 +40,6 @@ jobs:
         service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
         project_id: ${{ env.GCP_PROJECT_ID }}
 
-    - name: "Get gcloud Info"
-      run: gcloud info
-
     - name: Configure Docker to use the gcloud command-line tool as a credential helper
       run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
 
@@ -58,12 +55,16 @@ jobs:
       with:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_REGION }}
+    
+    - name: Deploy to GKE
+      run: |
+        kubectl set image deployment/bcx-cms-api \
+        bcx-cms-api=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-    # - name: Deploy to GKE
-    #   run: |
-    #     kubectl apply -f ./deployment.yaml
-    #     kubectl rollout restart deployment worker
 
-    # - name: Wait for Deployment Rollout
-    #   run: |
-    #     kubectl rollout status deployment/worker --timeout=120s
+    - name: Deploy to GKE
+      run:kubectl rollout restart deployment worker
+
+    - name: Wait for Deployment Rollout
+      run: |
+        kubectl rollout status deployment/worker --timeout=120s
