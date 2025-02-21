@@ -13,8 +13,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 // Source
 import { MESSAGES } from '@messages/index';
 import { LIMIT_PAGE } from '@config/constants';
-import { PageCategoryEntity } from '@apps/page_categories/entity';
-import { PageTagEntity } from '@apps/page_tags/entity';
+import { PageCategoryEntity } from '@apps/categories/entity';
+import { PageTagEntity } from '@apps/tags/entity';
 import { CreateDto, UpdateDto } from './dto';
 import { PageEntity } from './entity/index';
 import { LanguageEntity } from '@apps/languages/entity';

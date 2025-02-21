@@ -17,9 +17,8 @@ import {
 // Source
 import { PUBLISH_STATUS } from '@utils/enum/publish_status.enum';
 import ProviderEntity from '@apps/providers/entity/provider.entity';
-import { PageCategoryEntity } from '@apps/page_categories/entity';
+import { PageCategoryEntity } from '@apps/categories/entity';
 import { LanguageEntity } from '@apps/languages/entity';
-import { PageMetadataEntity } from '../../page_metadatas/entity/page_metadata.entity';
 import { UserEntity } from '@apps/user/entities/user.entity';
 
 @Entity({ name: 'pages' })
@@ -67,9 +66,9 @@ export class PageEntity extends BaseEntity {
   deleted_at: Date;
 
   // Metadata
-  @OneToMany(() => PageMetadataEntity, (metadata) => metadata.page)
-  @JoinTable()
-  metadata: PageMetadataEntity[];
+  // @OneToMany(() => PageMetadataEntity, (metadata) => metadata.page)
+  // @JoinTable()
+  // metadata: PageMetadataEntity[];
 
   // Translation
   @ManyToOne(() => PageEntity)

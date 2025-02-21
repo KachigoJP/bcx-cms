@@ -13,22 +13,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 // Source
 import { LIMIT_PAGE } from '../../config/constants';
 import { CreateDto, UpdateDto } from './dto';
-import { PageCategoryEntity } from './entity/page_categories.entity';
+import { TagEntity } from './entity/tags.entity';
 
 // Sample Data
-import * as SampleData from '../../../test/data/page_categories.json';
 import { MESSAGES } from '@messages/index';
 
 @Injectable()
 class MainService {
   constructor(
-    @InjectRepository(PageCategoryEntity)
-    private readonly mainRepo: Repository<PageCategoryEntity>,
+    @InjectRepository(TagEntity)
+    private readonly mainRepo: Repository<TagEntity>,
   ) {}
 
   async onModuleInit() {
     try {
-      this.mainRepo.save(SampleData as unknown as PageCategoryEntity);
     } catch (ex) {
       console.error(ex);
     }
@@ -83,7 +81,7 @@ class MainService {
 
       if (!entityFound)
         throw new HttpException(
-          MESSAGES.MSG_NOT_FOUND('Page Category'),
+          MESSAGES.MSG_NOT_FOUND('Page Tags'),
           HttpStatus.BAD_REQUEST,
         );
 

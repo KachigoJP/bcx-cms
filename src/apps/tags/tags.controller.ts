@@ -14,36 +14,36 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 // Source
-import MainService from './page_metadatas.service';
+import MainService from './tags.service';
 
-@Controller('pages/:page/metadatas')
+@Controller('pages/tags')
 class MainController {
   constructor(private readonly service: MainService) {}
 
   @HttpCode(HttpStatus.OK)
   @Get()
-  findAll(@Query() query, @Param('page') pageId: string) {
-    return this.service.findAll(pageId, query);
-  }
-
-  @UseGuards(AuthGuard('jwt'))
-  @Post()
-  @HttpCode(HttpStatus.OK)
-  create(@Param('page') pageId: string, @Body() dto) {
-    return this.service.create(pageId, dto);
+  findAll(@Query() query) {
+    return this.service.findAll(query);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Get(':id')
   @HttpCode(HttpStatus.OK)
-  findOne(@Param('page') pageId: string, @Param('id') id: string) {
-    return this.service.findOne(pageId, id);
+  findOne(@Param('id') id: string) {
+    return this.service.findOne(id);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post()
+  @HttpCode(HttpStatus.OK)
+  create(@Body() dto) {
+    return this.service.create(dto);
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Put(':id')
-  update(@Param('page') pageId: string, @Param('id') id: string, @Body() dto) {
-    return this.service.update(pageId, id, dto);
+  update(@Param('id') id: string, @Body() dto) {
+    return this.service.update(id, dto);
   }
 
   @UseGuards(AuthGuard('jwt'))

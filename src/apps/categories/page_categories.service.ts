@@ -1,41 +1,46 @@
 import { Like, Repository } from 'typeorm';
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  forwardRef,
+  Inject,
+  BadRequestException,
+  ForbiddenException,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 // Source
 import { LIMIT_PAGE } from '../../config/constants';
-import { CreateDto, UpdateDto, QueryDto } from './dto';
-import { PageMetadataEntity } from './entity/page_metadata.entity';
+import { CreateDto, UpdateDto } from './dto';
+import { PageCategoryEntity } from './entity/categories.entity';
 
 // Sample Data
+import * as SampleData from '../../../test/data/page_categories.json';
 import { MESSAGES } from '@messages/index';
 
 @Injectable()
 class MainService {
   constructor(
-    @InjectRepository(PageMetadataEntity)
-    private readonly mainRepo: Repository<PageMetadataEntity>,
+    @InjectRepository(PageCategoryEntity)
+    private readonly mainRepo: Repository<PageCategoryEntity>,
   ) {}
 
   async onModuleInit() {
     try {
+      this.mainRepo.save(SampleData as unknown as PageCategoryEntity);
     } catch (ex) {
       console.error(ex);
     }
   }
 
-  async findAll(pageId: string, query: QueryDto) {
+  async findAll(query) {
     try {
       const { page = 1, limit } = query;
       const skip = (page - 1) * LIMIT_PAGE;
 
       const [result, total] = await this.mainRepo.findAndCount({
-        where: {
-          page: {
-            id: pageId,
-          },
-        },
-        order: { key: 'ASC' },
+        order: { name: 'ASC' },
         take: limit,
         skip: skip,
       });
@@ -52,22 +57,17 @@ class MainService {
     }
   }
 
-  async findOne(pageId: string, id: string) {
+  async findOne(id: string) {
     try {
-      return await this.mainRepo.findOne({
-        where: {
-          id,
-          page: { id: pageId },
-        },
-      });
+      return await this.mainRepo.findOne({ where: { id } });
     } catch (e) {
       throw new HttpException('Error', HttpStatus.BAD_REQUEST);
     }
   }
 
-  async create(pageId: string, dto: CreateDto) {
+  async create(dto: CreateDto) {
     try {
-      await this.mainRepo.save({ ...dto, page: { id: pageId } });
+      await this.mainRepo.save(dto);
 
       return {
         message: MESSAGES.SUCCESS,
@@ -77,20 +77,19 @@ class MainService {
     }
   }
 
-  async update(pageId: string, id: string, dto: UpdateDto) {
+  async update(id: string, dto: UpdateDto) {
     try {
       const entityFound = await this.mainRepo.findOneBy({ id });
 
       if (!entityFound)
         throw new HttpException(
-          MESSAGES.MSG_NOT_FOUND('Page Tags'),
+          MESSAGES.MSG_NOT_FOUND('Page Category'),
           HttpStatus.BAD_REQUEST,
         );
 
       await this.mainRepo.save({
         id,
         ...dto,
-        page_id: pageId,
       });
 
       return {
@@ -103,7 +102,7 @@ class MainService {
 
   async remove(id: string) {
     try {
-      await this.mainRepo.delete(id);
+      await this.mainRepo.softDelete(id);
 
       return {
         message: MESSAGES.SUCCESS,

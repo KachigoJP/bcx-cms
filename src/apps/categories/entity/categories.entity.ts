@@ -6,10 +6,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToOne,
+  OneToMany,
 } from 'typeorm';
 
-@Entity({ name: 'page_categories' })
-export class PageCategoryEntity extends BaseEntity {
+@Entity({ name: 'categories' })
+export class CategoryEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -38,8 +40,10 @@ export class PageCategoryEntity extends BaseEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @DeleteDateColumn()
-  deleted_at: Date;
-
   // Relation
+  @ManyToOne(() => CategoryEntity, (category) => category.children, { nullable: true, onDelete: 'SET NULL' })
+  parent: CategoryEntity;
+
+  @OneToMany(() => CategoryEntity, (category) => category.parent)
+  children: CategoryEntity[];
 }
