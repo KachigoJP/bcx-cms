@@ -5,11 +5,14 @@ import {
   BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
-  DeleteDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
-@Entity({ name: 'page_tags' })
-export class PageTagEntity extends BaseEntity {
+import ProviderEntity from '@apps/providers/entity/provider.entity';
+
+@Entity({ name: 'tags' })
+export class TagEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -32,8 +35,8 @@ export class PageTagEntity extends BaseEntity {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @DeleteDateColumn()
-  deleted_at: Date;
-
   // Relation
+  @ManyToOne(() => ProviderEntity)
+  @JoinColumn()
+  provider: ProviderEntity;
 }

@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // Source
-import { PageCategoryEntity } from '@apps/page_categories/entity';
+import { PageCategoryEntity } from '@apps/categories/entity';
 import { LanguageEntity } from '@apps/languages/entity';
 import { PageEntity } from './entity/index';
 import MainService from './pages.service';
