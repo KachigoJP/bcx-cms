@@ -13,7 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 // Source
 import { LIMIT_PAGE } from '../../config/constants';
 import { CreateDto, UpdateDto } from './dto';
-import { PageCategoryEntity } from './entity/categories.entity';
+import { SEOEntity } from './entity/seo.entity';
 
 // Sample Data
 import * as SampleData from '../../../test/data/page_categories.json';
@@ -22,13 +22,13 @@ import { MESSAGES } from '@messages/index';
 @Injectable()
 class MainService {
   constructor(
-    @InjectRepository(PageCategoryEntity)
-    private readonly mainRepo: Repository<PageCategoryEntity>,
+    @InjectRepository(SEOEntity)
+    private readonly mainRepo: Repository<SEOEntity>,
   ) {}
 
   async onModuleInit() {
     try {
-      this.mainRepo.save(SampleData as unknown as PageCategoryEntity);
+      this.mainRepo.save(SampleData as unknown as SEOEntity);
     } catch (ex) {
       console.error(ex);
     }
@@ -40,7 +40,7 @@ class MainService {
       const skip = (page - 1) * LIMIT_PAGE;
 
       const [result, total] = await this.mainRepo.findAndCount({
-        order: { name: 'ASC' },
+        order: { id: 'ASC' },
         take: limit,
         skip: skip,
       });

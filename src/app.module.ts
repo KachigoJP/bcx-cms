@@ -11,7 +11,7 @@ import ProviderModule from '@apps/providers/provider.module';
 import SettingModule from '@apps/settings/settings.module';
 import ServiceModule from '@apps/services/module';
 import TestimonialModule from '@apps/testimonials/module';
-import PageCategoriesModule from '@apps/categories/page_categories.module';
+import PageCategoriesModule from '@apps/categories/categories.module';
 import PageTagsModule from '@apps/tags/tags.module';
 import PageMetadatasModule from '@apps/page_metadatas/page_metadatas.module';
 import PageModule from '@apps/pages/pages.module';

@@ -8,7 +8,10 @@ import {
   DeleteDateColumn,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from 'typeorm';
+
+import ProviderEntity from '@apps/providers/entity/provider.entity';
 
 @Entity({ name: 'categories' })
 export class CategoryEntity extends BaseEntity {
@@ -46,4 +49,9 @@ export class CategoryEntity extends BaseEntity {
 
   @OneToMany(() => CategoryEntity, (category) => category.parent)
   children: CategoryEntity[];
+
+  // Relation
+  @ManyToOne(() => ProviderEntity)
+  @JoinColumn()
+  provider: ProviderEntity;
 }
