@@ -17,9 +17,10 @@ import {
 // Source
 import { PUBLISH_STATUS } from '@utils/enum/publish_status.enum';
 import ProviderEntity from '@apps/providers/entity/provider.entity';
-import { PageCategoryEntity } from '@apps/categories/entity';
+import { CategoryEntity } from '@apps/categories/entity';
 import { LanguageEntity } from '@apps/languages/entity';
 import { UserEntity } from '@apps/user/entities/user.entity';
+import { TagEntity } from '@apps/tags/entity';
 
 @Entity({ name: 'pages' })
 export class PageEntity extends BaseEntity {
@@ -65,10 +66,30 @@ export class PageEntity extends BaseEntity {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  // Metadata
-  // @OneToMany(() => PageMetadataEntity, (metadata) => metadata.page)
-  // @JoinTable()
-  // metadata: PageMetadataEntity[];
+  @ManyToMany(() => CategoryEntity, (category) => category.pages, {
+    cascade: true,
+  })
+  @JoinTable({
+    name: 'page_categories', // Join table for pages and categories
+    joinColumn: { name: 'id', referencedColumnName: 'objectId' },
+    inverseJoinColumn: {
+      name: 'id',
+      referencedColumnName: 'objectId',
+    },
+  })
+  categories: CategoryEntity[];
+
+  @ManyToMany(() => TagEntity, (tag) => tag.pages, { cascade: true })
+  @JoinTable({
+    name: 'page_tags', // Join table for pages and tags
+    joinColumn: { name: 'pageId', referencedColumnName: 'pageId' },
+    inverseJoinColumn: { name: 'tagId', referencedColumnName: 'tagId' },
+  })
+  tags: Tag[];
+
+  @OneToOne(() => Seo, { cascade: true, eager: true }) // Each page has one SEO metadata
+  @JoinColumn()
+  seo: Seo;
 
   // Translation
   @ManyToOne(() => PageEntity)
@@ -88,9 +109,9 @@ export class PageEntity extends BaseEntity {
   @JoinTable()
   author: UserEntity;
 
-  @ManyToOne(() => PageCategoryEntity)
+  @ManyToOne(() => CategoryEntity)
   @JoinTable()
-  category: PageCategoryEntity;
+  category: CategoryEntity;
 
   @ManyToOne(() => ProviderEntity)
   @JoinColumn()

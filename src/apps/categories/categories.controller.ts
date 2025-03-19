@@ -14,7 +14,7 @@ import {
 import { AuthGuard } from '@nestjs/passport';
 
 // Source
-import MainService from './page_categories.service';
+import MainService from './categories.service';
 
 @Controller('pages/categories')
 class MainController {

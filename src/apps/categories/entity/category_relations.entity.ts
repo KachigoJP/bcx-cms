@@ -10,6 +10,7 @@ import {
   OneToMany,
   JoinColumn,
 } from 'typeorm';
+import ProviderEntity from '@apps/providers/entity/provider.entity';
 import { CategoryEntity } from './categories.entity';
 
 @Entity({ name: 'category_relations' })
@@ -33,4 +34,9 @@ export class CategoryRelationsEntity extends BaseEntity {
 
   @Column()
   categoryId: number;
+  
+  // Relation
+  @ManyToOne(() => ProviderEntity)
+  @JoinColumn()
+  provider: ProviderEntity;
 }
