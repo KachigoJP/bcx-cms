@@ -7,11 +7,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Menu } from './menu.entity';
-import { MenuItemTranslation } from './menu-item-translation.entity';
+import { MenuEntity } from './menu.entity';
+import { MenuItemTranslationEntity } from './menu-item-translation.entity';
 
 @Entity('menu_items')
-export class MenuItem {
+export class MenuItemEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,27 +19,32 @@ export class MenuItem {
   order: number;
 
   @Column({ default: true })
-  isActive: boolean;
+  is_active: boolean;
 
   @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  updatedAt: Date;
+  updated_at: Date;
 
   // Self-referencing relationship for parent-child hierarchy
-  @ManyToOne(() => MenuItem, (menuItem) => menuItem.children, {
+  @ManyToOne(() => MenuItemEntity, (menuItem) => menuItem.children, {
     nullable: true,
     onDelete: 'CASCADE',
   })
-  parent: MenuItem;
+  parent: MenuItemEntity;
 
-  @OneToMany(() => MenuItem, (menuItem) => menuItem.parent)
-  children: MenuItem[];
+  @OneToMany(() => MenuItemEntity, (menuItem) => menuItem.parent)
+  children: MenuItemEntity[];
 
-  @ManyToOne(() => Menu, (menu) => menu.menuItems, { onDelete: 'CASCADE' })
-  menu: Menu;
+  @ManyToOne(() => MenuEntity, (menu) => menu.menuItems, {
+    onDelete: 'CASCADE',
+  })
+  menu: MenuEntity;
 
-  @OneToMany(() => MenuItemTranslation, (translation) => translation.menuItem)
-  translations: MenuItemTranslation[];
+  @OneToMany(
+    () => MenuItemTranslationEntity,
+    (translation) => translation.menuItem,
+  )
+  translations: MenuItemTranslationEntity[];
 }

@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { MenuService } from '../menu.service';
-import { Menu } from '../entities/menu.entity';
-import { MenuItem } from '../entities/menu-item.entity';
-import { MenuItemTranslation } from '../entities/menu-item-translation.entity';
+import { MenuEntity } from '../entities/menu.entity';
+import { MenuItemEntity } from '../entities/menu-item.entity';
+import { MenuItemTranslationEntity } from '../entities/menu-item-translation.entity';
 import { CreateMenuItemDto, UpdateMenuItemDto } from '../dto';
 
 describe('MenuService - MenuItem Methods', () => {
@@ -18,13 +18,13 @@ describe('MenuService - MenuItem Methods', () => {
       providers: [
         MenuService,
         {
-          provide: getRepositoryToken(Menu),
+          provide: getRepositoryToken(MenuEntity),
           useValue: {
             findOne: jest.fn(),
           },
         },
         {
-          provide: getRepositoryToken(MenuItem),
+          provide: getRepositoryToken(MenuItemEntity),
           useValue: {
             create: jest.fn(),
             save: jest.fn(),
@@ -34,7 +34,7 @@ describe('MenuService - MenuItem Methods', () => {
           },
         },
         {
-          provide: getRepositoryToken(MenuItemTranslation),
+          provide: getRepositoryToken(MenuItemTranslationEntity),
           useValue: {
             create: jest.fn(),
             save: jest.fn(),
@@ -45,10 +45,10 @@ describe('MenuService - MenuItem Methods', () => {
     }).compile();
 
     service = module.get<MenuService>(MenuService);
-    menuRepository = module.get(getRepositoryToken(Menu));
-    menuItemRepository = module.get(getRepositoryToken(MenuItem));
+    menuRepository = module.get(getRepositoryToken(MenuEntity));
+    menuItemRepository = module.get(getRepositoryToken(MenuItemEntity));
     menuItemTranslationRepository = module.get(
-      getRepositoryToken(MenuItemTranslation),
+      getRepositoryToken(MenuItemTranslationEntity),
     );
   });
 
@@ -62,7 +62,7 @@ describe('MenuService - MenuItem Methods', () => {
         translations: [{ language: 'en', title: 'Test Item', url: '/test' }],
       };
       const menu = { id: 1, name: 'Test Menu' };
-      const menuItem = { id: 1, menu, parent: null, order: 1, isActive: true };
+      const menuItem = { id: 1, menu, parent: null, order: 1, is_active: true };
       const savedMenuItem = {
         ...menuItem,
         translations: createMenuItemDto.translations,
@@ -86,7 +86,7 @@ describe('MenuService - MenuItem Methods', () => {
         menu,
         parent: null,
         order: 1,
-        isActive: true,
+        is_active: true,
       });
       expect(menuItemRepository.save).toHaveBeenCalledWith(menuItem);
       expect(menuItemTranslationRepository.create).toHaveBeenCalledTimes(1);
@@ -101,7 +101,7 @@ describe('MenuService - MenuItem Methods', () => {
 
   describe('findAllMenuItems', () => {
     it('should return all menu items for a specific menu', async () => {
-      const menuItems = [{ id: 1, order: 1, isActive: true }];
+      const menuItems = [{ id: 1, order: 1, is_active: true }];
       menuItemRepository.find.mockResolvedValue(menuItems);
 
       expect(await service.findAllMenuItems(1)).toEqual(menuItems);
@@ -145,7 +145,7 @@ describe('MenuService - MenuItem Methods', () => {
           { language: 'en', title: 'Updated Item', url: '/updated' },
         ],
       };
-      const menuItem = { id: 1, order: 1, isActive: true };
+      const menuItem = { id: 1, order: 1, is_active: true };
       const updatedMenuItem = { ...menuItem, ...updateMenuItemDto };
 
       service.findMenuItemById = jest.fn().mockResolvedValue(menuItem);
@@ -178,7 +178,7 @@ describe('MenuService - MenuItem Methods', () => {
 
   describe('removeMenuItem', () => {
     it('should remove a menu item by ID', async () => {
-      const menuItem = { id: 1, order: 1, isActive: true };
+      const menuItem = { id: 1, order: 1, is_active: true };
 
       service.findMenuItemById = jest.fn().mockResolvedValue(menuItem);
       menuItemRepository.remove.mockResolvedValue(menuItem);

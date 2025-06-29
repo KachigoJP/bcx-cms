@@ -66,53 +66,6 @@ export class PageEntity extends BaseEntity {
   @DeleteDateColumn()
   deleted_at: Date;
 
-  @ManyToMany(() => CategoryEntity, (category) => category.pages, {
-    cascade: true,
-  })
-  @JoinTable({
-    name: 'page_categories', // Join table for pages and categories
-    joinColumn: { name: 'id', referencedColumnName: 'objectId' },
-    inverseJoinColumn: {
-      name: 'id',
-      referencedColumnName: 'objectId',
-    },
-  })
-  categories: CategoryEntity[];
-
-  @ManyToMany(() => TagEntity, (tag) => tag.pages, { cascade: true })
-  @JoinTable({
-    name: 'page_tags', // Join table for pages and tags
-    joinColumn: { name: 'pageId', referencedColumnName: 'pageId' },
-    inverseJoinColumn: { name: 'tagId', referencedColumnName: 'tagId' },
-  })
-  tags: Tag[];
-
-  @OneToOne(() => Seo, { cascade: true, eager: true }) // Each page has one SEO metadata
-  @JoinColumn()
-  seo: Seo;
-
-  // Translation
-  @ManyToOne(() => PageEntity)
-  @JoinTable()
-  root: PageEntity;
-
-  @OneToMany(() => PageEntity, (translation) => translation.root)
-  @JoinTable()
-  translation: PageEntity;
-
-  @ManyToOne(() => LanguageEntity)
-  @JoinTable()
-  language: LanguageEntity;
-
-  // Relation
-  @ManyToOne(() => UserEntity)
-  @JoinTable()
-  author: UserEntity;
-
-  @ManyToOne(() => CategoryEntity)
-  @JoinTable()
-  category: CategoryEntity;
-
   @ManyToOne(() => ProviderEntity)
   @JoinColumn()
   provider: ProviderEntity;

@@ -13,9 +13,9 @@ import ServiceModule from '@apps/services/module';
 import TestimonialModule from '@apps/testimonials/module';
 import PageCategoriesModule from '@apps/categories/categories.module';
 import PageTagsModule from '@apps/tags/tags.module';
-import PageMetadatasModule from '@apps/page_metadatas/page_metadatas.module';
 import PageModule from '@apps/pages/pages.module';
 import LanguageModule from '@apps/languages/languages.module';
+import MenuModule from '@apps/menu/menu.module';
 
 @Module({
   imports: [
@@ -32,9 +32,9 @@ import LanguageModule from '@apps/languages/languages.module';
     TestimonialModule,
     PageCategoriesModule,
     PageTagsModule,
-    PageMetadatasModule,
     PageModule,
     LanguageModule,
+    MenuModule,
   ],
   controllers: [],
   providers: [],

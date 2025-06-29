@@ -6,10 +6,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { MenuItem } from './menu-item.entity';
+import { MenuItemEntity } from './menu-item.entity';
 
 @Entity('menus')
-export class Menu {
+export class MenuEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -17,14 +17,14 @@ export class Menu {
   name: string;
 
   @Column({ default: true })
-  isActive: boolean;
+  is_active: boolean;
 
   @CreateDateColumn({ type: 'timestamp' })
-  createdAt: Date;
+  created_at: Date;
 
   @UpdateDateColumn({ type: 'timestamp' })
-  updatedAt: Date;
+  updated_at: Date;
 
-  @OneToMany(() => MenuItem, (menuItem) => menuItem.menu)
-  menuItems: MenuItem[];
+  @OneToMany(() => MenuItemEntity, (menuItem) => menuItem.menu)
+  menuItems: MenuItemEntity[];
 }

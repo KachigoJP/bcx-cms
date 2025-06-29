@@ -6,36 +6,42 @@ import {
   Param,
   Patch,
   Delete,
+  UseGuards,
+  Query,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
+
+// Source
 import { MenuService } from './menu.service';
-import { Menu } from './entities/menu.entity';
+import { MenuEntity } from './entities/menu.entity';
 import {
   CreateMenuDto,
   UpdateMenuDto,
   CreateMenuItemDto,
   UpdateMenuItemDto,
 } from './dto';
-import { MenuItem } from './entities/menu-item.entity';
+import { MenuItemEntity } from './entities/menu-item.entity';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('menus')
 export class MenuController {
   constructor(private readonly menuService: MenuService) {}
 
   // Create a new menu
   @Post()
-  async create(@Body() menuData: CreateMenuDto): Promise<Menu> {
+  async create(@Body() menuData: CreateMenuDto): Promise<MenuEntity> {
     return this.menuService.create(menuData);
   }
 
   // Get all menus
   @Get()
-  async findAll(): Promise<Menu[]> {
+  async findAll() {
     return this.menuService.findAll();
   }
 
   // Get a single menu by ID
   @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Menu> {
+  async findOne(@Param('id') id: number): Promise<MenuEntity> {
     return this.menuService.findOne(id);
   }
 
@@ -44,7 +50,7 @@ export class MenuController {
   async update(
     @Param('id') id: number,
     @Body() menuData: UpdateMenuDto,
-  ): Promise<Menu> {
+  ): Promise<MenuEntity> {
     return this.menuService.update(id, menuData);
   }
 
@@ -58,19 +64,23 @@ export class MenuController {
   @Post(':id/items')
   async createMenuItem(
     @Body() createMenuItemDto: CreateMenuItemDto,
-  ): Promise<MenuItem> {
+  ): Promise<MenuItemEntity> {
     return this.menuService.createMenuItem(createMenuItemDto);
   }
 
   // Get all menu items for a specific menu
   @Get(':id/items')
-  async findAllMenuItems(@Param('id') menuId: number): Promise<MenuItem[]> {
+  async findAllMenuItems(
+    @Param('id') menuId: number,
+  ): Promise<MenuItemEntity[]> {
     return this.menuService.findAllMenuItems(menuId);
   }
 
   // Get a single menu item by ID
   @Get('items/:itemId')
-  async findMenuItemById(@Param('itemId') itemId: number): Promise<MenuItem> {
+  async findMenuItemById(
+    @Param('itemId') itemId: number,
+  ): Promise<MenuItemEntity> {
     return this.menuService.findMenuItemById(itemId);
   }
 
@@ -79,7 +89,7 @@ export class MenuController {
   async updateMenuItem(
     @Param('itemId') itemId: number,
     @Body() updateData: UpdateMenuItemDto,
-  ): Promise<MenuItem> {
+  ): Promise<MenuItemEntity> {
     return this.menuService.updateMenuItem(itemId, updateData);
   }
 

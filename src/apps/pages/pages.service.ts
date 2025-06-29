@@ -13,8 +13,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 // Source
 import { MESSAGES } from '@messages/index';
 import { LIMIT_PAGE } from '@config/constants';
-import { PageCategoryEntity } from '@apps/categories/entity';
-import { PageTagEntity } from '@apps/tags/entity';
+import { CategoryEntity } from '@apps/categories/entity';
+import { TagEntity } from '@apps/tags/entity';
 import { CreateDto, UpdateDto } from './dto';
 import { PageEntity } from './entity/index';
 import { LanguageEntity } from '@apps/languages/entity';
@@ -27,8 +27,8 @@ class MainService {
   constructor(
     @InjectRepository(PageEntity)
     private readonly mainRepo: Repository<PageEntity>,
-    @InjectRepository(PageCategoryEntity)
-    private readonly categoryRepo: Repository<PageCategoryEntity>,
+    @InjectRepository(CategoryEntity)
+    private readonly categoryRepo: Repository<CategoryEntity>,
     @InjectRepository(LanguageEntity)
     private readonly langRepo: Repository<LanguageEntity>,
   ) {}
@@ -68,10 +68,6 @@ class MainService {
     try {
       const result = await this.mainRepo.findOne({
         where: { id },
-        relations: {
-          category: true,
-          metadata: true,
-        },
       });
 
       return {

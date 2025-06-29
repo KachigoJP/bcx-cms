@@ -67,7 +67,7 @@ class MainService {
 
   async create(dto: CreateDto) {
     try {
-      await this.mainRepo.save(dto);
+      // await this.mainRepo.save(dto);
 
       return {
         message: MESSAGES.SUCCESS,
