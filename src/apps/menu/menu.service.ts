@@ -1,9 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Menu } from './entities/menu.entity';
-import { MenuItem } from './entities/menu-item.entity';
-import { MenuItemTranslation } from './entities/menu-item-translation.entity';
+
+// Source
+import { LIMIT_PAGE } from '@config/constants';
+import { MenuEntity } from './entities/menu.entity';
+import { MenuItemEntity } from './entities/menu-item.entity';
+import { MenuItemTranslationEntity } from './entities/menu-item-translation.entity';
 import {
   CreateMenuDto,
   UpdateMenuDto,
@@ -14,27 +17,27 @@ import {
 @Injectable()
 export class MenuService {
   constructor(
-    @InjectRepository(Menu)
-    private readonly menuRepository: Repository<Menu>,
-    @InjectRepository(MenuItem)
-    private readonly menuItemRepository: Repository<MenuItem>,
-    @InjectRepository(MenuItemTranslation)
-    private readonly menuItemTranslationRepository: Repository<MenuItemTranslation>,
+    @InjectRepository(MenuEntity)
+    private readonly menuRepository: Repository<MenuEntity>,
+    @InjectRepository(MenuItemEntity)
+    private readonly menuItemRepository: Repository<MenuItemEntity>,
+    @InjectRepository(MenuItemTranslationEntity)
+    private readonly menuItemTranslationRepository: Repository<MenuItemTranslationEntity>,
   ) {}
 
   // Create a new menu
-  async create(menuData: CreateMenuDto): Promise<Menu> {
+  async create(menuData: CreateMenuDto): Promise<MenuEntity> {
     const menu = this.menuRepository.create(menuData);
     return this.menuRepository.save(menu);
   }
 
   // Get all menus
-  async findAll(): Promise<Menu[]> {
+  async findAll() {
     return this.menuRepository.find();
   }
 
   // Get a single menu by ID
-  async findOne(menuId: number): Promise<Menu> {
+  async findOne(menuId: number): Promise<MenuEntity> {
     const menu = await this.menuRepository.findOne({
       where: { id: menuId },
       relations: ['items'],
@@ -46,7 +49,7 @@ export class MenuService {
   }
 
   // Update a menu by ID
-  async update(menuId: number, menuData: UpdateMenuDto): Promise<Menu> {
+  async update(menuId: number, menuData: UpdateMenuDto): Promise<MenuEntity> {
     const menu = await this.findOne(menuId);
     Object.assign(menu, menuData);
     return this.menuRepository.save(menu);
@@ -61,14 +64,14 @@ export class MenuService {
   // Create a new menu item
   async createMenuItem(
     createMenuItemDto: CreateMenuItemDto,
-  ): Promise<MenuItem> {
+  ): Promise<MenuItemEntity> {
     const { id, parentId, order, isActive, translations } = createMenuItemDto;
 
     // Find the menu the item belongs to
     const menu = await this.findOne(id);
 
     // Find the parent menu item (if provided)
-    let parent: MenuItem = null;
+    let parent: MenuItemEntity = null;
     if (parentId) {
       parent = await this.menuItemRepository.findOne({
         where: { id: parentId },
@@ -85,7 +88,7 @@ export class MenuService {
       menu,
       parent,
       order,
-      isActive: isActive ?? true, // Default to true if not provided
+      is_active: isActive ?? true, // Default to true if not provided
     });
 
     const savedMenuItem = await this.menuItemRepository.save(menuItem);
@@ -106,7 +109,7 @@ export class MenuService {
   }
 
   // Get all menu items for a specific menu
-  async findAllMenuItems(menuId: number): Promise<MenuItem[]> {
+  async findAllMenuItems(menuId: number): Promise<MenuItemEntity[]> {
     return this.menuItemRepository.find({
       where: { menu: { id: menuId } },
       relations: ['parent', 'children', 'translations'],
@@ -115,7 +118,7 @@ export class MenuService {
   }
 
   // Get a single menu item by ID
-  async findMenuItemById(itemId: number): Promise<MenuItem> {
+  async findMenuItemById(itemId: number): Promise<MenuItemEntity> {
     const menuItem = await this.menuItemRepository.findOne({
       where: { id: itemId },
       relations: ['parent', 'children', 'translations'],
@@ -130,10 +133,10 @@ export class MenuService {
   async updateMenuItem(
     itemId: number,
     updateData: UpdateMenuItemDto,
-  ): Promise<MenuItem> {
+  ): Promise<MenuItemEntity> {
     const { id, parentId, order, isActive, translations } = updateData;
     const menuItem = await this.findMenuItemById(itemId);
-    Object.assign(menuItem, { id, parentId, order, isActive });
+    Object.assign(menuItem, { id, parentId, order, is_active: isActive });
 
     const updatedMenuItem = await this.menuItemRepository.save(menuItem);
 

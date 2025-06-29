@@ -1,12 +1,12 @@
 import { config } from 'dotenv';
 
 config();
-export const NODE_ENV = process.env.NODE_ENV
-export const WILDCARD_DOMAIN = process.env.WILDCARD_DOMAIN
+export const NODE_ENV = process.env.NODE_ENV;
+export const WILDCARD_DOMAIN = process.env.WILDCARD_DOMAIN;
 export const MIN_PASSWORD_LENGTH = 6;
 export const MAX_PASSWORD_LENGTH = 35;
 export const LIMIT_PAGE = 25;
-export const LOGIN_EXPIRED_MINUTES = 10;
+export const LOGIN_EXPIRED_MINUTES = 100;
 export const BCRYPT_HASH_ROUND = 12;
 export const GMT_8_TIMEZONE = 'Asia/Hong_Kong';
 export const PASSWORD_REGEX =

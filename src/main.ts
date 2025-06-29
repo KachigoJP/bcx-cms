@@ -6,13 +6,13 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  console.log('DDDDD', process.env.CORS_ORIGIN);
   app.use(cookieParser());
   app.enableCors({
     origin: JSON.parse(process.env.CORS_ORIGIN),
     methods: JSON.parse(process.env.CORS_METHOD),
     credentials: true,
     exposedHeaders: ['set-cookie'],
-    // preflightContinue: true,
   });
 
   app.enableVersioning({

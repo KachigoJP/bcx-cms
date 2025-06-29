@@ -36,35 +36,6 @@ services:
       - "5432:5432" # Expose PostgreSQL on port 5432
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
-  keycloak:
-    image: quay.io/keycloak/keycloak:26.1.0
-    container_name: keycloak
-    environment:
-      KC_DB: "postgres"
-      KC_DB_URL_HOST: "postgres" # Use service name as hostname for database
-      KC_DB_URL_PORT: "5432"
-      KC_DB_URL_DATABASE: "keycloak"
-      KC_DB_USERNAME: "root" # Replace with your desired username
-      KC_DB_PASSWORD: "1804" # Replace with your desired password
-      KC_HOSTNAME: "localhost" # Change to your domain if needed
-      KC_HOSTNAME_URL: "http://localhost:7080" # Change to your domain and port if needed, switch to https if you use it
-      KC_HOSTNAME_ADMIN_URL: "http://localhost:7080" # change to your domain and port if needed, switch to https if you use it
-      KC_PROXY: "edge" # use edge instead of passthrough when you run in local or non-k8s
-      KC_HTTP_ENABLED: "true"
-      KC_HEALTH_ENABLED: "true"
-      KC_HOSTNAME_STRICT: "false" # Set to true if you need strict hostname checking
-      PROXY_ADDRESS_FORWARDING: "true"
-      KC_PROXY_HEADERS: "xforwarded"
-      KC_BOOTSTRAP_ADMIN_USERNAME: "admin" # Replace with your desired admin username
-      KC_BOOTSTRAP_ADMIN_PASSWORD: "admin" # Replace with your desired admin password
-    ports:
-      - "7080:8080"
-      - "8443:8443"
-    depends_on:
-      - postgres
-    command:
-      - start-dev
-
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin_container

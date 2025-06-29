@@ -6,10 +6,10 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { MenuItem } from './menu-item.entity';
+import { MenuItemEntity } from './menu-item.entity';
 
 @Entity('menu_item_translations')
-export class MenuItemTranslation {
+export class MenuItemTranslationEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -28,8 +28,8 @@ export class MenuItemTranslation {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @ManyToOne(() => MenuItem, (menuItem) => menuItem.translations, {
+  @ManyToOne(() => MenuItemEntity, (menuItem) => menuItem.translations, {
     onDelete: 'CASCADE',
   })
-  menuItem: MenuItem;
+  menuItem: MenuItemEntity;
 }
