@@ -1,0 +1,66 @@
+name: CI with GCP
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+env:
+  GCP_PROJECT_ID: banchanxanh
+  GCP_REGION: us-central1
+  GAR_REPOSITORY: bcx-dev
+  DEPLOYMENT_NAME: bcx-cms-api
+  GKE_CLUSTER: bcx-cluster
+  GKE_REGION: us-central1-a
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Authenticate to GCP
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        project_id: ${{ env.GCP_PROJECT_ID }}
+
+    - name: Set up Google Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+        project_id: ${{ env.GCP_PROJECT_ID }}
+
+    - name: Configure Docker to use the gcloud command-line tool as a credential helper
+      run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
+
+    - name: Build Docker Image and Push to GCP Artifact Registry
+      run: |
+        BUILD_IMAGE= ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.DEPLOYMENT_NAME }}:${{ (date +%s) }}
+        echo "Building image: $BUILD_IMAGE"  # Debugging
+        docker buildx create --use
+        docker buildx build --push -t BUILD_IMAGE . --file Dockerfile.prod
+
+    - name: Set up GKE credentials
+      uses: google-github-actions/get-gke-credentials@v2
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_REGION }}
+    
+    - name: Deploy to GKE
+      run: |
+        kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} \
+        ${{ env.DEPLOYMENT_NAME }}=BUILD_IMAGE
+    - name: Deploy to GKE
+      run: kubectl rollout restart deployment worker
+
+    - name: Wait for Deployment Rollout
+      run: |
+        kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }} --timeout=120s
