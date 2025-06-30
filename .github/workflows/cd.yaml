@@ -3,14 +3,11 @@ name: CI with GCP
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
+      - develop
       - main
 env:
   GCP_PROJECT_ID: banchanxanh
   GCP_REGION: us-central1
-  GAR_REPOSITORY: bcx-dev
   DEPLOYMENT_NAME: bcx-cms-api
   GKE_CLUSTER: bcx-cluster
   GKE_REGION: us-central1-a
@@ -25,6 +22,24 @@ jobs:
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
+
+    - name: Determine Image Tag
+      id: image_tag
+      run: |
+        BRANCH_NAME="${{ github.ref_name }}"
+        ENVIRONMENT=""
+
+        if [ "$BRANCH_NAME" == "develop" ]; then
+          ENVIRONMENT="-dev"
+        elif [ "$BRANCH_NAME" == "main" ]; then
+          ENVIRONMENT="-prod"
+        else
+          echo "Unsupported branch: $BRANCH_NAME"
+          exit 1  # Fail the workflow if the branch is not supported
+        fi
+
+        IMAGE_TAG="${{ github.sha }}${ENVIRONMENT}" #Use sha for each branch
+        echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_OUTPUT
 
     - name: Authenticate to GCP
       uses: google-github-actions/auth@v2
@@ -43,24 +58,25 @@ jobs:
 
     - name: Build Docker Image and Push to GCP Artifact Registry
       run: |
-        BUILD_IMAGE= ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.DEPLOYMENT_NAME }}:${{ (date +%s) }}
+        BUILD_IMAGE= ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/banchanxanh/${{ github.repository }}:${{ steps.image_tag.outputs.IMAGE_TAG }}
         echo "Building image: $BUILD_IMAGE"  # Debugging
         docker buildx create --use
-        docker buildx build --push -t BUILD_IMAGE . --file Dockerfile.prod
+        docker buildx build --push -t BUILD_IMAGE . --file Dockerfile
 
-    - name: Set up GKE credentials
-      uses: google-github-actions/get-gke-credentials@v2
-      with:
-        cluster_name: ${{ env.GKE_CLUSTER }}
-        location: ${{ env.GKE_REGION }}
+    # - name: Set up GKE credentials
+    #   uses: google-github-actions/get-gke-credentials@v2
+    #   with:
+    #     cluster_name: ${{ env.GKE_CLUSTER }}
+    #     location: ${{ env.GKE_REGION }}
     
-    - name: Deploy to GKE
-      run: |
-        kubectl set image deployment/${{ env.DEPLOYMENT_NAME }} \
-        ${{ env.DEPLOYMENT_NAME }}=BUILD_IMAGE
-    - name: Deploy to GKE
-      run: kubectl rollout restart deployment worker
+    # - name: Deploy to GKE
+    #   run: |
+    #     kubectl set image deployment/${{ github.repository }}-${{ steps.image_tag.outputs.IMAGE_TAG }} \
+    #     ${{ github.repository }}:${{ steps.image_tag.outputs.IMAGE_TAG }}=BUILD_IMAGE
+    # - name: Deploy to GKE
+    #   run: kubectl rollout restart deployment/${{ github.repository }}-${{ steps.image_tag.outputs.IMAGE_TAG }}
 
-    - name: Wait for Deployment Rollout
-      run: |
-        kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }} --timeout=120s
+    # - name: Wait for Deployment Rollout
+    #   run: |
+    #     kubectl rollout status deployment/${{ github.repository }}-${{ steps.image_tag.outputs.IMAGE_TAG }} --timeout=120s
+        
