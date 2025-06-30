@@ -38,7 +38,7 @@ jobs:
           exit 1  # Fail the workflow if the branch is not supported
         fi
 
-        echo "IMAGE_TAG=${{ github.sha }" >> $GITHUB_OUTPUT
+        echo "IMAGE_TAG=${{ github.sha }}" >> $GITHUB_OUTPUT
         echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
         echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | cut -d '/' -f 2)" >> $GITHUB_OUTPUT
 
