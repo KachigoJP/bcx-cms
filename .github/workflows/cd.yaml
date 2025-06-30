@@ -49,20 +49,20 @@ jobs:
         docker buildx create --use
         docker buildx build --push -t "${BUILD_IMAGE}" . --file Dockerfile.prod
 
-    # - name: Set up GKE credentials
-    #   uses: google-github-actions/get-gke-credentials@v2
-    #   with:
-    #     cluster_name: ${{ env.GKE_CLUSTER }}
-    #     location: ${{ env.GKE_REGION }}
+    - name: Set up GKE credentials
+      uses: google-github-actions/get-gke-credentials@v2
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_REGION }}
     
-    # - name: Deploy to GKE
-    #   run: |
-    #     kubectl set image deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }} \
-    #     ${{ github.repository }}:${{ steps.image_tag.outputs.IMAGE_TAG }}=BUILD_IMAGE
-    # - name: Deploy to GKE
-    #   run: kubectl rollout restart deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }}
+    - name: Deploy to GKE
+      run: |
+        kubectl set image deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }} \
+        ${{ github.repository }}:${{ steps.image_tag.outputs.IMAGE_TAG }}=BUILD_IMAGE
+    - name: Deploy to GKE
+      run: kubectl rollout restart deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }}
 
-    # - name: Wait for Deployment Rollout
-    #   run: |
-    #     kubectl rollout status deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.IMAGE_TAG }} --timeout=120s
+    - name: Wait for Deployment Rollout
+      run: |
+        kubectl rollout status deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.IMAGE_TAG }} --timeout=120s
         

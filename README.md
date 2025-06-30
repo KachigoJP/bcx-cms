@@ -47,7 +47,7 @@ $ npm run start:prod
 
 ## Build image
 
-docker build -t bcx-cms-api:1.0.0 .
+docker build -t bcx-cms-api:1.0.0 . -f Dockerfile.prod
 
 ## Test
 
