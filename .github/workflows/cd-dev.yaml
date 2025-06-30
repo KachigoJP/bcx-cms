@@ -10,9 +10,8 @@ on:
 env:
   GCP_PROJECT_ID: banchanxanh
   GCP_REGION: us-central1
-  GAR_REPOSITORY: banchanxanh
-  IMAGE_NAME: bcx-cms-api
-  IMAGE_TAG: v1.0.0
+  GAR_REPOSITORY: bcx-dev
+  DEPLOYMENT_NAME: bcx-cms-api
   GKE_CLUSTER: bcx-cluster
   GKE_REGION: us-central1-a
 
@@ -21,7 +20,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the code
     - name: Checkout code
       uses: actions/checkout@v4
 
@@ -45,25 +43,24 @@ jobs:
 
     - name: Build Docker Image and Push to GCP Artifact Registry
       run: |
+        BUILD_IMAGE= ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.DEPLOYMENT_NAME }}:${{ (date +%s) }}
+        echo "Building image: $BUILD_IMAGE"  # Debugging
         docker buildx create --use
-        docker buildx build --push \
-          -t ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} \
-          . --file Dockerfile_prod
+        docker buildx build --push -t BUILD_IMAGE . --file Dockerfile.prod
 
-    # - name: Set up GKE credentials
-    #   uses: google-github-actions/get-gke-credentials@v2
-    #   with:
-    #     cluster_name: ${{ env.GKE_CLUSTER }}
-    #     location: ${{ env.GKE_REGION }}
+    - name: Set up GKE credentials
+      uses: google-github-actions/get-gke-credentials@v2
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_REGION }}
     
-    # - name: Deploy to GKE
-    #   run: |
-    #     kubectl set image deployment/bcx-cms-api \
-    #     bcx-cms-api=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.GAR_REPOSITORY }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-
     - name: Deploy to GKE
-      run: kubectl rollout restart deployment bcx-cms-api
+      run: |
+        kubectl set image deployment/${{ env.DEPLOYMENT_NAME }}-dev \
+        ${{ env.DEPLOYMENT_NAME }}-dev=BUILD_IMAGE
+    - name: Deploy to GKE
+      run: kubectl rollout restart deployment worker
 
     - name: Wait for Deployment Rollout
       run: |
-        kubectl rollout status deployment/bcx-cms-api --timeout=120s
+        kubectl rollout status deployment/${{ env.DEPLOYMENT_NAME }}-dev --timeout=120s
