@@ -44,23 +44,23 @@ jobs:
 
     - name: Build Docker Image and Push to GCP Artifact Registry
       run: |
-        BUILD_IMAGE= ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/banchanxanh/${{ steps.image_tag.outputs.REPOSITORY_NAME }}:${{ steps.image_tag.outputs.IMAGE_TAG }}
+        BUILD_IMAGE= ${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ steps.image_tag.outputs.REPOSITORY_NAME }}:${{ steps.image_tag.outputs.IMAGE_TAG }}
         echo "Building image: $BUILD_IMAGE"  # Debugging
         docker buildx create --use
-        docker buildx build --push -t BUILD_IMAGE . --file Dockerfile
+        docker buildx build --push -t BUILD_IMAGE .
 
-    - name: Set up GKE credentials
-      uses: google-github-actions/get-gke-credentials@v2
-      with:
-        cluster_name: ${{ env.GKE_CLUSTER }}
-        location: ${{ env.GKE_REGION }}
+    # - name: Set up GKE credentials
+    #   uses: google-github-actions/get-gke-credentials@v2
+    #   with:
+    #     cluster_name: ${{ env.GKE_CLUSTER }}
+    #     location: ${{ env.GKE_REGION }}
     
-    - name: Deploy to GKE
-      run: |
-        kubectl set image deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }} \
-        ${{ github.repository }}:${{ steps.image_tag.outputs.IMAGE_TAG }}=BUILD_IMAGE
-    - name: Deploy to GKE
-      run: kubectl rollout restart deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }}
+    # - name: Deploy to GKE
+    #   run: |
+    #     kubectl set image deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }} \
+    #     ${{ github.repository }}:${{ steps.image_tag.outputs.IMAGE_TAG }}=BUILD_IMAGE
+    # - name: Deploy to GKE
+    #   run: kubectl rollout restart deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }}
 
     # - name: Wait for Deployment Rollout
     #   run: |
