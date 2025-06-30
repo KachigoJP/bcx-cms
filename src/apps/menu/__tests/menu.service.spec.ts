@@ -2,9 +2,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 import { MenuService } from '../menu.service';
-import { Menu } from '../entities/menu.entity';
-import { MenuItem } from '../entities/menu-item.entity';
-import { MenuItemTranslation } from '../entities/menu-item-translation.entity';
+import { MenuEntity } from '../entities/menu.entity';
+import { MenuItemEntity } from '../entities/menu-item.entity';
+import { MenuItemTranslationEntity } from '../entities/menu-item-translation.entity';
 import { CreateMenuDto, UpdateMenuDto } from '../dto';
 
 describe('MenuService', () => {
@@ -16,7 +16,7 @@ describe('MenuService', () => {
       providers: [
         MenuService,
         {
-          provide: getRepositoryToken(Menu),
+          provide: getRepositoryToken(MenuEntity),
           useValue: {
             create: jest.fn(),
             save: jest.fn(),
@@ -26,7 +26,7 @@ describe('MenuService', () => {
           },
         },
         {
-          provide: getRepositoryToken(MenuItem),
+          provide: getRepositoryToken(MenuItemEntity),
           useValue: {
             create: jest.fn(),
             save: jest.fn(),
@@ -36,7 +36,7 @@ describe('MenuService', () => {
           },
         },
         {
-          provide: getRepositoryToken(MenuItemTranslation),
+          provide: getRepositoryToken(MenuItemTranslationEntity),
           useValue: {
             create: jest.fn(),
             save: jest.fn(),
@@ -47,7 +47,7 @@ describe('MenuService', () => {
     }).compile();
 
     service = module.get<MenuService>(MenuService);
-    menuRepository = module.get(getRepositoryToken(Menu));
+    menuRepository = module.get(getRepositoryToken(MenuEntity));
   });
 
   it('should be defined', () => {
