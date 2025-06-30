@@ -400,5 +400,4 @@ dist
 .serverless/**/*.zip
 test/*
 !test/data
-package-lock.json
 postgres_data
