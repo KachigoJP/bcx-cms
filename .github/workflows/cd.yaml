@@ -35,8 +35,8 @@ jobs:
         service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
         project_id: ${{ env.GCP_PROJECT_ID }}
 
-    - name: Determine Image Tag
-      id: image_tag
+    - name: Determine Build value
+      id: build_value
       run: |
         BRANCH_NAME="${{ github.ref_name }}"
         ENVIRONMENT=""
@@ -49,18 +49,18 @@ jobs:
           echo "Unsupported branch: $BRANCH_NAME"
           exit 1  # Fail the workflow if the branch is not supported
         fi
-
-        DATE=$(date +'%Y%m%d%H%M%S')
-
-        IMAGE_TAG="${DATE}-${{ github.sha }}"
-        echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_OUTPUT
         echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
+
+        VERSION=$(jq -r .version package.json)
+        echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_OUTPUT
+        echo "Package Version: $VERSION"
+
         echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | cut -d '/' -f 2)" >> $GITHUB_OUTPUT
 
     - name: Build Docker Image and Push to GCP Artifact Registry
       id: build_push
       run: |
-        BUILD_IMAGE=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ github.ref_name }}/${{ steps.image_tag.outputs.REPOSITORY_NAME }}:${{ steps.image_tag.outputs.IMAGE_TAG }}
+        BUILD_IMAGE=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ steps.build_value.outputs.REPOSITORY_NAME }}:${{ steps.build_value.outputs.PACKAGE_VERSION }}
         echo "Building image: $BUILD_IMAGE"  # Debugging
         docker buildx create --use
         docker buildx build --push -t "${BUILD_IMAGE}" . --file Dockerfile.prod
@@ -74,10 +74,10 @@ jobs:
     
     - name: Deploy to GKE
       run: |
-        kubectl set image deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }} \
+        kubectl set image deployment/${{ steps.build_value.outputs.REPOSITORY_NAME }}-${{ steps.build_value.outputs.ENVIRONMENT }} \
         ${{ env.IMAGE_NAME }}=${{ steps.build_push.outputs.BUILD_IMAGE }}
         
     - name: Wait for Deployment Rollout
       run: |
-        kubectl rollout status deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }} --timeout=120s
+        kubectl rollout status deployment/${{ steps.build_value.outputs.REPOSITORY_NAME }}-${{ steps.build_value.outputs.ENVIRONMENT }} --timeout=120s
         
