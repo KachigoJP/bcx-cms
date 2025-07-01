@@ -77,8 +77,7 @@ jobs:
     
     - name: Deploy to GKE
       run: |
-        kubectl set image deployment/${{ steps.build_value.outputs.REPOSITORY_NAME }}-${{ steps.build_value.outputs.ENVIRONMENT }} \
-        ${{ steps.build_push.outputs.BUILD_IMAGE }}
+        kubectl set image deployment/${{ steps.build_value.outputs.REPOSITORY_NAME }}-${{ steps.build_value.outputs.ENVIRONMENT }} ${{ steps.build_push.outputs.BUILD_IMAGE }}
         
     - name: Wait for Deployment Rollout
       run: |
