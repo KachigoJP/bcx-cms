@@ -32,7 +32,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
       with:
         version: 'latest' # Or a specific version
-        # service_account_key: ${{ secrets.GKE_SA_KEY }}
+        service_account_key: ${{ secrets.GKE_SA_KEY }}
         project_id: ${{ env.GCP_PROJECT_ID }}
 
     - name: Determine Build value
