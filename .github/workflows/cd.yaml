@@ -73,20 +73,12 @@ jobs:
       with:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_REGION }}
+        project_id: ${{ env.GCP_PROJECT_ID }}
 
     - name: Deploy to GKE
-      uses: google-github-actions/deploy-gke@v1
-      with:
-        project_id: ${{ env.GCP_PROJECT_ID }}
-        cluster_name: ${{ env.GKE_CLUSTER }}
-        location: ${{ env.GKE_REGION }}
-        # service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}}}
-        images: ${{ steps.build_push.outputs.BUILD_IMAGE }}
-    
-    # - name: Deploy to GKE
-    #   run: |
-    #     kubectl set image deployment/${{ steps.build_value.outputs.REPOSITORY_NAME }}-${{ steps.build_value.outputs.ENVIRONMENT }} \
-    #     ${{ steps.build_value.outputs.REPOSITORY_NAME }}=${{ steps.build_push.outputs.BUILD_IMAGE }}
+      run: |
+        kubectl set image deployment/${{ steps.build_value.outputs.REPOSITORY_NAME }}-${{ steps.build_value.outputs.ENVIRONMENT }} \
+        ${{ steps.build_value.outputs.REPOSITORY_NAME }}=${{ steps.build_push.outputs.BUILD_IMAGE }}
         
     # - name: Wait for Deployment Rollout
     #   run: |
