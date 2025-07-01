@@ -8,7 +8,6 @@ on:
 env:
   GCP_PROJECT_ID: banchanxanh
   GCP_REGION: us-central1
-  DEPLOYMENT_NAME: bcx-cms-api
   GKE_CLUSTER: bcx-cluster
   GKE_REGION: us-central1-a
 
@@ -77,7 +76,8 @@ jobs:
     
     - name: Deploy to GKE
       run: |
-        kubectl set image deployment/${{ steps.build_value.outputs.REPOSITORY_NAME }}-${{ steps.build_value.outputs.ENVIRONMENT }} ${{ steps.build_push.outputs.BUILD_IMAGE }}
+        kubectl set image deployment/${{ steps.build_value.outputs.REPOSITORY_NAME }}-${{ steps.build_value.outputs.ENVIRONMENT }} \
+        ${{ steps.build_value.outputs.REPOSITORY_NAME }}=${{ steps.build_push.outputs.BUILD_IMAGE }}
         
     - name: Wait for Deployment Rollout
       run: |
