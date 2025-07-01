@@ -76,9 +76,7 @@ jobs:
       run: |
         kubectl set image deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }} \
         ${{ env.IMAGE_NAME }}=${{ steps.build_push.outputs.BUILD_IMAGE }}
-    - name: Deploy to GKE
-      run: kubectl rollout restart deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }}
-
+        
     - name: Wait for Deployment Rollout
       run: |
         kubectl rollout status deployment/${{ steps.image_tag.outputs.REPOSITORY_NAME }}-${{ steps.image_tag.outputs.ENVIRONMENT }} --timeout=120s
