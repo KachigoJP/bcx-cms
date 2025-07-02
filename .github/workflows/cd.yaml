@@ -62,7 +62,7 @@ jobs:
     - name: Build Docker Image and Push to GCP Artifact Registry
       id: build_push
       run: |
-        BUILD_IMAGE=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ github.ref_name }}/${{ steps.build_value.outputs.REPOSITORY_NAME }}:${{ steps.build_value.outputs.PACKAGE_VERSION }}
+        BUILD_IMAGE=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ github.ref_name }}/${{ steps.build_value.outputs.REPOSITORY_NAME }}:latest
         echo "Building image: $BUILD_IMAGE"  # Debugging
         docker buildx create --use
         docker buildx build --push -t "${BUILD_IMAGE}" . --file Dockerfile.prod
