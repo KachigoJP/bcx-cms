@@ -95,7 +95,7 @@ export class AuthService {
         sameSite: NODE_ENV === "production" ? "strict" : "none"
       }
       
-      if (NODE_ENV === "production") {
+      if (WILDCARD_DOMAIN) {
         cookieOption.domain = WILDCARD_DOMAIN
       }
 
