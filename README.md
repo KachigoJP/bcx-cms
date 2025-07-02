@@ -48,6 +48,9 @@ $ npm run start:prod
 ## Build image
 
 docker build -t bcx-cms-api:1.0.0 . -f Dockerfile.prod
+DOCKER_BUILDKIT=1 docker buildx build -t us-central1-docker.pkg.dev/banchanxanh/development/bcx-cms-api:latest . --file Dockerfile.prod
+docker push us-central1-docker.pkg.dev/banchanxanh/development/bcx-cms-api:latest
+docker run -d -p 5000:3000/tcp us-central1-docker.pkg.dev/banchanxanh/development/bcx-cms-api:latest 
 
 ## Test
 
