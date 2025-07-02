@@ -32,42 +32,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
       with:
         version: 'latest' # Or a specific version
-        service_account_key: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
         project_id: ${{ env.GCP_PROJECT_ID }}
-
-    - name: Determine Build value
-      id: build_value
-      run: |
-        BRANCH_NAME="${{ github.ref_name }}"
-        ENVIRONMENT=""
-
-        if [ "$BRANCH_NAME" == "develop" ]; then
-          ENVIRONMENT="dev"
-        elif [ "$BRANCH_NAME" == "main" ]; then
-          ENVIRONMENT="prod"
-        else
-          echo "Unsupported branch: $BRANCH_NAME"
-          exit 1  # Fail the workflow if the branch is not supported
-        fi
-        echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
-
-        VERSION=$(jq -r .version package.json)
-        echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_OUTPUT
-        echo "Package Version: $VERSION"
-
-        echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | cut -d '/' -f 2)" >> $GITHUB_OUTPUT
-
-    - name: Configure Docker to use the gcloud command-line tool as a credential helper
-      run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
-
-    - name: Build Docker Image and Push to GCP Artifact Registry
-      id: build_push
-      run: |
-        BUILD_IMAGE=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ github.ref_name }}/${{ steps.build_value.outputs.REPOSITORY_NAME }}:${{ steps.build_value.outputs.PACKAGE_VERSION }}
-        echo "Building image: $BUILD_IMAGE"  # Debugging
-        docker buildx create --use
-        docker buildx build --push -t "${BUILD_IMAGE}" . --file Dockerfile.prod
-        echo "BUILD_IMAGE=$BUILD_IMAGE" >> $GITHUB_OUTPUT #export build image for later use
 
     - name: Set up GKE credentials
       uses: google-github-actions/get-gke-credentials@v2
@@ -75,14 +40,59 @@ jobs:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_REGION }}
         project_id: ${{ env.GCP_PROJECT_ID }}
-        credentials: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
-
-    - name: Deploy to GKE
+    
+    - name: Test GKE
       run: |
-        kubectl set image deployment/${{ steps.build_value.outputs.REPOSITORY_NAME }}-${{ steps.build_value.outputs.ENVIRONMENT }} \
-        ${{ steps.build_value.outputs.REPOSITORY_NAME }}=${{ steps.build_push.outputs.BUILD_IMAGE }}
+        kubectl get nodes
+        kubectl get pods
+        
+    # - name: Determine Build value
+    #   id: build_value
+    #   run: |
+    #     BRANCH_NAME="${{ github.ref_name }}"
+    #     ENVIRONMENT=""
+
+    #     if [ "$BRANCH_NAME" == "develop" ]; then
+    #       ENVIRONMENT="dev"
+    #     elif [ "$BRANCH_NAME" == "main" ]; then
+    #       ENVIRONMENT="prod"
+    #     else
+    #       echo "Unsupported branch: $BRANCH_NAME"
+    #       exit 1  # Fail the workflow if the branch is not supported
+    #     fi
+    #     echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
+
+    #     VERSION=$(jq -r .version package.json)
+    #     echo "PACKAGE_VERSION=$VERSION" >> $GITHUB_OUTPUT
+    #     echo "Package Version: $VERSION"
+
+    #     echo "REPOSITORY_NAME=$(echo '${{ github.repository }}' | cut -d '/' -f 2)" >> $GITHUB_OUTPUT
+
+    # - name: Configure Docker to use the gcloud command-line tool as a credential helper
+    #   run: gcloud auth configure-docker ${{ env.GCP_REGION }}-docker.pkg.dev
+
+    # - name: Build Docker Image and Push to GCP Artifact Registry
+    #   id: build_push
+    #   run: |
+    #     BUILD_IMAGE=${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ github.ref_name }}/${{ steps.build_value.outputs.REPOSITORY_NAME }}:${{ steps.build_value.outputs.PACKAGE_VERSION }}
+    #     echo "Building image: $BUILD_IMAGE"  # Debugging
+    #     docker buildx create --use
+    #     docker buildx build --push -t "${BUILD_IMAGE}" . --file Dockerfile.prod
+    #     echo "BUILD_IMAGE=$BUILD_IMAGE" >> $GITHUB_OUTPUT #export build image for later use
+
+    # - name: Set up GKE credentials
+    #   uses: google-github-actions/get-gke-credentials@v2
+    #   with:
+    #     cluster_name: ${{ env.GKE_CLUSTER }}
+    #     location: ${{ env.GKE_REGION }}
+    #     project_id: ${{ env.GCP_PROJECT_ID }}
+    #     credentials: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+
+    # - name: Deploy to GKE
+    #   run: |
+    #     kubectl set image deployment/${{ steps.build_value.outputs.REPOSITORY_NAME }}-${{ steps.build_value.outputs.ENVIRONMENT }} \
+    #     ${{ steps.build_value.outputs.REPOSITORY_NAME }}=${{ steps.build_push.outputs.BUILD_IMAGE }}
         
     # - name: Wait for Deployment Rollout
     #   run: |
     #     kubectl rollout status deployment/${{ steps.build_value.outputs.REPOSITORY_NAME }}-${{ steps.build_value.outputs.ENVIRONMENT }} --timeout=120s
-        
