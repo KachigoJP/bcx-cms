@@ -28,7 +28,7 @@ jobs:
         credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
         project_id: ${{ env.GCP_PROJECT_ID }}
 
-    - name: Authenticate to GCP
+    - name: Setup Google Cloud
       uses: google-github-actions/setup-gcloud@v2
       with:
         version: 'latest' # Or a specific version
