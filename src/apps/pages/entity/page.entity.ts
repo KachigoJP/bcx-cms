@@ -21,6 +21,7 @@ import { CategoryEntity } from '@apps/categories/entity';
 import { LanguageEntity } from '@apps/languages/entity';
 import { UserEntity } from '@apps/user/entities/user.entity';
 import { TagEntity } from '@apps/tags/entity';
+import { PageTranslationEntity } from './page-translation.entity';
 
 @Entity({ name: 'pages' })
 export class PageEntity extends BaseEntity {
@@ -69,4 +70,13 @@ export class PageEntity extends BaseEntity {
   @ManyToOne(() => ProviderEntity)
   @JoinColumn()
   provider: ProviderEntity;
+
+  @ManyToOne(() => CategoryEntity, { nullable: true })
+  @JoinColumn()
+  category: CategoryEntity;
+
+  @OneToMany(() => PageTranslationEntity, (translation) => translation.page, {
+    cascade: true,
+  })
+  translations: PageTranslationEntity[];
 }

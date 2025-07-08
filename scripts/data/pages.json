@@ -1,0 +1,32 @@
+[
+  {
+    "id": "f1e2d3c4-b5a6-7890-1234-abcdefabcdef",
+    "title": "About Us",
+    "slug": "about-us",
+    "content": null,
+    "photo": null,
+    "status": "published",
+    "categoryId": "d1e2f3a4-5b6c-7d8e-9f01-234567890abc",
+    "providerId": "a8e6f059-9927-4544-97ea-ef404a4a30f9",
+    "translations": [
+      {
+        "id": "t1e2d3c4-b5a6-7890-1234-abcdefabcdef",
+        "language": "en",
+        "title": "About Us",
+        "content": "Information about our company."
+      },
+      {
+        "id": "t1e2d3c4-b5a6-7890-1234-abcdefabcdea",
+        "language": "ja",
+        "title": "私たちについて",
+        "content": "私たちの会社についての情報。"
+      },
+      {
+        "id": "t1e2d3c4-b5a6-7890-1234-abcdefabcdeb",
+        "language": "vi",
+        "title": "Về chúng tôi",
+        "content": "Thông tin về công ty của chúng tôi."
+      }
+    ]
+  }
+]
