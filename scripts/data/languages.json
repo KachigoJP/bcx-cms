@@ -1,0 +1,23 @@
+[
+  {
+    "id": "e0d6b3c3-bf59-431a-b92e-c4cf4e229588",
+    "name": "Vietnamese",
+    "code": "vi",
+    "is_default": true,
+    "direction": "ltr"
+  },
+  {
+    "id": "accce398-2b1f-46bc-bb29-51b1aff32318",
+    "name": "English (USA)",
+    "code": "en-us",
+    "is_default": false,
+    "direction": "ltr"
+  },
+  {
+    "id": "4be49003-077e-4b96-b076-52a7857f948d",
+    "name": "Japanese",
+    "code": "ja",
+    "is_default": false,
+    "direction": "ltr"
+  }
+]

@@ -16,9 +16,6 @@ import { CreateDto, UpdateDto } from './dto';
 import { LanguageEntity } from './entity/language.entity';
 import { MESSAGES } from '@messages/index';
 
-// Sample Data
-import * as SampleData from '../../../test/data/languages.json';
-
 @Injectable()
 class MainService {
   constructor(
@@ -26,12 +23,15 @@ class MainService {
     private readonly mainRepo: Repository<LanguageEntity>,
   ) {}
 
-  async onModuleInit() {
-    try {
-      this.mainRepo.save(SampleData as unknown as LanguageEntity);
-    } catch (ex) {
-      console.error(ex);
+  async initializeData(data) {
+    // Check if data already exists (optional, but often a good idea)
+    const existingData = await this.mainRepo.find();
+    if (existingData.length > 0) {
+      return;
     }
+
+    // Save the data to the database
+    await this.mainRepo.save(data);
   }
 
   async findAll(query) {

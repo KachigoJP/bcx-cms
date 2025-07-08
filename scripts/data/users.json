@@ -1,0 +1,11 @@
+[
+  {
+    "id": "26e35cbc-f88d-4ea9-8492-7a2b7e99ec35",
+    "email": "test@gmail.com",
+    "password": "$2b$12$M1vSIhc1ViAOH9D7OUmuWehpCvoTcJ/gbDThhZx59zXpq05wWfvia",
+    "first_name": "Admin",
+    "last_name": "User",
+    "is_verified": true,
+    "is_active": true
+  }
+]

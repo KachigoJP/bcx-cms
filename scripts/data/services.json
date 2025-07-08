@@ -1,0 +1,29 @@
+[
+  {
+    "id": "e59adf96-9ebe-4ac1-be84-83dbba19ce4b",
+    "key": "about_us",
+    "title": "<span>BÀN CHÂN XANH</span> là 1 tổ chức phi lợi nhuận.",
+    "sub_title": "Về chúng tôi.",
+    "image": "https://drive.usercontent.google.com/download?id=11Xj9VcytueWQ7GMhsGqKVGrFTT8VpLU-&authuser=0",
+    "content": "Khởi nguồn gây quỹ bởi những người trẻ đam mê leo núi mang quốc tịch Việt Nam đang sinh sống, làm việc và hoạt động tại Nhật Bản. Chúng tôi gây quỹ trên toàn nước Nhật và các quốc gia khác. Các các nhân, tổ chức có thể quyên góp ủng hộ các em theo các hình thức như, tham gia leo núi cùng team và quyên góp tiền mặt, mua thêm các sản phẩm leo núi (khăn, chuông …), ủng hộ bằng sách cũ, ủng hộ bằng cách chuyển khoản",
+    "tag": "about_us"
+  },
+  {
+    "id": "4e831e3d-1c57-4174-80fe-6f67a4ec96d1",
+    "key": "activity_trekking",
+    "title": "<span>Leo núi</span> kết nối mọi người.",
+    "sub_title": "Hoạt động chính.",
+    "image": "https://drive.usercontent.google.com/download?id=1BsKH40M-bEhmu2wYFTQZyqIV9BHKhC9F&authuser=0",
+    "content": "Mỗi một hành trình bàn chân xanh luôn mong muốn tạo một hành trình tràn ngập tiếng cười, những kỉ niệm cho mỗi người tham gia. Và thật may mắn Bàn Chân Xanh cảm thấy thật hạnh phúc khi được là nơi trở kết nối mọi người đến với nhau. Những người bạn mới cùng chung niềm đam mê - nhóm bạn trẻ leo núi tokyo. Từ những người xa lạ giờ đã trở thành những người bạn cùng chung đam mê. Cùng hẹn nhau leo núi vào cuối tuần, cùng nhau cắm trại, vui chơi thoải mái.",
+    "tag": "about_us"
+  },
+  {
+    "id": "54a563c7-fe19-48ea-ac20-380ee31bd1a0",
+    "key": "activity_running",
+    "title": "<span>Chạy bộ</span> nâng cao sức khoẻ.",
+    "sub_title": "Hoạt động chính.",
+    "image": "https://drive.usercontent.google.com/download?id=1MHmPvTT7FNZRKUuBirN28lTv7kmTq515&authuser=0",
+    "content": "GIẢI CHẠY GÂY QUỸ TỪ THIỆN - CHẠY CÙNG ƯỚC MƠ EM một giải chạy vừa tạo ra giá trị cho cộng đồng, vừa rèn luyện sức khoẻ. Mỗi bước chạy không chỉ là một bước tiến về phía trước mà còn là câu chuyện về sức mạnh, ý chí vượt qua chính mình.",
+    "tag": "about_us"
+  }
+]
