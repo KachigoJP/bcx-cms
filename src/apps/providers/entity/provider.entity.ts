@@ -61,8 +61,4 @@ export default class ProviderEntity extends BaseEntity {
 
   @DeleteDateColumn()
   deleted_at: Date;
-
-  // Relation
-  // @OneToMany(() => ServiceEntity, (service) => service.provider)
-  // services: ServiceEntity[];
 }

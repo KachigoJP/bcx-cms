@@ -12,6 +12,13 @@ import {
 } from 'typeorm';
 
 import ProviderEntity from '@apps/providers/entity/provider.entity';
+import { CategoryTranslationEntity } from './category-translation.entity';
+
+export enum CategoryType {
+  GENERAL = 'general',
+  BLOG = 'blog',
+  PAGE = 'page',
+}
 
 @Entity({ name: 'categories' })
 export class CategoryEntity extends BaseEntity {
@@ -37,6 +44,13 @@ export class CategoryEntity extends BaseEntity {
   })
   description: string;
 
+  @Column({
+    type: 'enum',
+    enum: CategoryType,
+    default: CategoryType.GENERAL,
+  })
+  type: CategoryType; // e.g., 'blog', 'page', etc.
+
   @CreateDateColumn()
   created_at: Date;
 
@@ -44,14 +58,24 @@ export class CategoryEntity extends BaseEntity {
   updated_at: Date;
 
   // Relation
-  @ManyToOne(() => CategoryEntity, (category) => category.children, { nullable: true, onDelete: 'SET NULL' })
+  @ManyToOne(() => CategoryEntity, (category) => category.children, {
+    nullable: true,
+    onDelete: 'SET NULL',
+  })
   parent: CategoryEntity;
 
   @OneToMany(() => CategoryEntity, (category) => category.parent)
   children: CategoryEntity[];
 
   // Relation
-  @ManyToOne(() => ProviderEntity)
+  @ManyToOne(() => ProviderEntity, { nullable: true })
   @JoinColumn()
   provider: ProviderEntity;
+
+  @OneToMany(
+    () => CategoryTranslationEntity,
+    (translation) => translation.category,
+    { cascade: true },
+  )
+  translations: CategoryTranslationEntity[];
 }

@@ -1,0 +1,80 @@
+[
+  {
+    "id": "b7e8a1c2-1f2a-4c3d-9e5f-1234567890ab",
+    "slug": "technology",
+    "type": "blog",
+    "providerId": "a8e6f059-9927-4544-97ea-ef404a4a30f9",
+    "translations": [
+      {
+        "id": "e1a1b2c3-1111-2222-3333-1234567890ab",
+        "language": "en",
+        "name": "Technology",
+        "description": "All about technology."
+      },
+      {
+        "id": "e1a1b2c3-1111-2222-3333-1234567890ad",
+        "language": "ja",
+        "name": "テクノロジー",
+        "description": "テクノロジーに関するすべて。"
+      },
+      {
+        "id": "e1a1b2c3-1111-2222-3333-1234567890ae",
+        "language": "vi",
+        "name": "Công nghệ",
+        "description": "Tất cả về công nghệ."
+      }
+    ]
+  },
+  {
+    "id": "c3d9e5f1-2a4b-4c5d-8e7f-abcdef123456",
+    "slug": "sports",
+    "type": "blog",
+    "providerId": "a8e6f059-9927-4544-97ea-ef404a4a30f9",
+    "translations": [
+      {
+        "id": "e1a1b2c3-1111-2222-3333-abcdef123451",
+        "language": "en",
+        "name": "Sports",
+        "description": "All about sports."
+      },
+      {
+        "id": "e1a1b2c3-1111-2222-3333-abcdef123453",
+        "language": "ja",
+        "name": "スポーツ",
+        "description": "スポーツに関するすべて。"
+      },
+      {
+        "id": "e1a1b2c3-1111-2222-3333-abcdef123454",
+        "language": "vi",
+        "name": "Thể thao",
+        "description": "Tất cả về thể thao."
+      }
+    ]
+  },
+  {
+    "id": "d1e2f3a4-5b6c-7d8e-9f01-234567890abc",
+    "slug": "about-us",
+    "type": "page",
+    "providerId": "a8e6f059-9927-4544-97ea-ef404a4a30f9",
+    "translations": [
+      {
+        "id": "f1a2b3c4-5555-6666-7777-1234567890ab",
+        "language": "en",
+        "name": "About Us",
+        "description": "Information about our company."
+      },
+      {
+        "id": "f1a2b3c4-5555-6666-7777-1234567890ad",
+        "language": "ja",
+        "name": "私たちについて",
+        "description": "私たちの会社についての情報。"
+      },
+      {
+        "id": "f1a2b3c4-5555-6666-7777-1234567890ae",
+        "language": "vi",
+        "name": "Về chúng tôi",
+        "description": "Thông tin về công ty của chúng tôi."
+      }
+    ]
+  }
+]

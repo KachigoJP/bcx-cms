@@ -25,12 +25,15 @@ export default class MainService {
     private readonly mainRepo: Repository<ProviderEntity>,
   ) {}
 
-  async onModuleInit() {
-    try {
-      this.mainRepo.save(providerSample as unknown as ProviderEntity);
-    } catch (ex) {
-      console.log('EX', ex);
+  async initializeData(data) {
+    // Check if data already exists (optional, but often a good idea)
+    const existingData = await this.mainRepo.find();
+    if (existingData.length > 0) {
+      return;
     }
+
+    // Save the data to the database
+    await this.mainRepo.save(data);
   }
 
   async findAll(query) {
