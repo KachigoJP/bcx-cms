@@ -1,0 +1,59 @@
+[
+  {
+    "id": "f7e8a1c2-1f2a-4c3d-9e5f-1234567890ab",
+    "name": "Main Menu",
+    "is_active": true,
+    "created_at": "2024-01-01T00:00:00.000Z",
+    "updated_at": "2024-01-01T00:00:00.000Z",
+    "menuItems": [
+      {
+        "id": "a1b2c3d4-1111-2222-3333-abcdefabcdef",
+        "label": "Home",
+        "url": "/",
+        "order": 1,
+        "parentId": null,
+        "translations": [
+          {
+            "id": "b1c2d3e4-1111-2222-3333-abcdefabcdef",
+            "language": "en",
+            "label": "Home"
+          },
+          {
+            "id": "b1c2d3e4-1111-2222-3333-abcdefabcdea",
+            "language": "ja",
+            "label": "ホーム"
+          },
+          {
+            "id": "b1c2d3e4-1111-2222-3333-abcdefabcdeb",
+            "language": "vi",
+            "label": "Trang chủ"
+          }
+        ]
+      },
+      {
+        "id": "a1b2c3d4-1111-2222-3333-abcdefabcdea",
+        "label": "About",
+        "url": "/about",
+        "order": 2,
+        "parentId": null,
+        "translations": [
+          {
+            "id": "b1c2d3e4-1111-2222-3333-abcdefabcdec",
+            "language": "en",
+            "label": "About"
+          },
+          {
+            "id": "b1c2d3e4-1111-2222-3333-abcdefabcdee",
+            "language": "ja",
+            "label": "私たちについて"
+          },
+          {
+            "id": "b1c2d3e4-1111-2222-3333-abcdefabcdef",
+            "language": "vi",
+            "label": "Về chúng tôi"
+          }
+        ]
+      }
+    ]
+  }
+]

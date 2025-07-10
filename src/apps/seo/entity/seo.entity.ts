@@ -14,7 +14,7 @@ import {
 import ProviderEntity from '@apps/providers/entity/provider.entity';
 
 @Entity({ name: 'seo' })
-export class SEOEntity extends BaseEntity {
+export class SeoEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

@@ -22,6 +22,7 @@ import { LanguageEntity } from '@apps/languages/entity';
 import { UserEntity } from '@apps/user/entities/user.entity';
 import { TagEntity } from '@apps/tags/entity';
 import { PageTranslationEntity } from './page-translation.entity';
+import { SeoEntity } from '@apps/seo/entity/seo.entity';
 
 @Entity({ name: 'pages' })
 export class PageEntity extends BaseEntity {
@@ -79,4 +80,8 @@ export class PageEntity extends BaseEntity {
     cascade: true,
   })
   translations: PageTranslationEntity[];
+
+  @OneToOne(() => SeoEntity, { cascade: true, nullable: true })
+  @JoinColumn()
+  seo: SeoEntity;
 }

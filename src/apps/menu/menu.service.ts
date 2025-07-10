@@ -25,6 +25,17 @@ export class MenuService {
     private readonly menuItemTranslationRepository: Repository<MenuItemTranslationEntity>,
   ) {}
 
+  async initializeData(data) {
+    // Check if data already exists (optional, but often a good idea)
+    const existingData = await this.menuRepository.find();
+    if (existingData.length > 0) {
+      return;
+    }
+
+    // Save the data to the database
+    await this.menuRepository.save(data);
+  }
+
   // Create a new menu
   async create(menuData: CreateMenuDto): Promise<MenuEntity> {
     const menu = this.menuRepository.create(menuData);
