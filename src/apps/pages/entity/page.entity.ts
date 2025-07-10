@@ -12,6 +12,7 @@ import {
   JoinColumn,
   JoinTable,
   OneToMany,
+  Index,
 } from 'typeorm';
 
 // Source
@@ -23,6 +24,7 @@ import { UserEntity } from '@apps/user/entities/user.entity';
 import { TagEntity } from '@apps/tags/entity';
 import { PageTranslationEntity } from './page-translation.entity';
 import { SeoEntity } from '@apps/seo/entity/seo.entity';
+import { PageComponentEntity } from './page-component.entity';
 
 @Entity({ name: 'pages' })
 export class PageEntity extends BaseEntity {
@@ -34,9 +36,11 @@ export class PageEntity extends BaseEntity {
   })
   title: string;
 
+  @Index()
   @Column({
     type: 'varchar',
     nullable: true,
+    unique: true,
   })
   slug: string;
 
@@ -84,4 +88,10 @@ export class PageEntity extends BaseEntity {
   @OneToOne(() => SeoEntity, { cascade: true, nullable: true })
   @JoinColumn()
   seo: SeoEntity;
+
+  @OneToMany(() => PageComponentEntity, (pc) => pc.page, {
+    cascade: true,
+    eager: true,
+  })
+  pageComponents: PageComponentEntity[];
 }

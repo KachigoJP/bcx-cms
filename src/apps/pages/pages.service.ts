@@ -41,7 +41,7 @@ class MainService {
     await this.mainRepo.save(data);
   }
 
-  async findAll(query) {
+  async findAll(query, language?: string) {
     try {
       const { page = 1, limit } = query;
       const skip = (page - 1) * LIMIT_PAGE;
@@ -50,10 +50,21 @@ class MainService {
         order: { created_at: 'DESC' },
         take: limit,
         skip: skip,
+        relations: ['translations'],
+      });
+
+      // If language is specified, filter translations
+      const data = result.map((pageItem) => {
+        if (language && pageItem.translations) {
+          pageItem.translations = pageItem.translations.filter(
+            (t) => t.language === language,
+          );
+        }
+        return pageItem;
       });
 
       return {
-        data: result,
+        data,
         page,
         pageSize: LIMIT_PAGE,
         totalPage: Math.ceil(total / LIMIT_PAGE),
@@ -64,11 +75,18 @@ class MainService {
     }
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, language?: string) {
     try {
       const result = await this.mainRepo.findOne({
         where: { id },
+        relations: ['translations'],
       });
+
+      if (language && result && result.translations) {
+        result.translations = result.translations.filter(
+          (t) => t.language === language,
+        );
+      }
 
       return {
         data: result,
@@ -79,9 +97,22 @@ class MainService {
     }
   }
 
-  async create(dto: CreateDto) {
+  async create(dto: CreateDto, language?: string) {
     try {
-      await this.mainRepo.save(dto);
+      let page = this.mainRepo.create(dto);
+      if (language && dto.translations) {
+        // Only keep translation for the specified language
+        page.translations = dto.translations
+          .filter((t) => t.language === language)
+          .map((t) =>
+            this.mainRepo.manager.create('PageTranslationEntity', {
+              ...t,
+              language,
+              page,
+            }),
+          );
+      }
+      await this.mainRepo.save(page);
 
       return {
         message: MESSAGES.SUCCESS,
@@ -91,9 +122,12 @@ class MainService {
     }
   }
 
-  async update(id: string, dto: UpdateDto) {
+  async update(id: string, dto: UpdateDto, language?: string) {
     try {
-      const entityFound = await this.mainRepo.findOneBy({ id });
+      const entityFound = await this.mainRepo.findOne({
+        where: { id },
+        relations: ['translations'],
+      });
 
       if (!entityFound)
         throw new HttpException(
@@ -101,10 +135,29 @@ class MainService {
           HttpStatus.BAD_REQUEST,
         );
 
-      await this.mainRepo.save({
-        id,
-        ...dto,
-      });
+      if (language) {
+        // Update translation for the given language
+        let translation = entityFound.translations.find(
+          (t) => t.language === language,
+        );
+        if (translation) {
+          Object.assign(translation, dto);
+        } else {
+          translation = this.mainRepo.manager.create('PageTranslationEntity', {
+            ...dto,
+            language,
+            page: entityFound,
+          });
+          entityFound.translations.push(translation);
+        }
+        await this.mainRepo.manager.save(entityFound.translations);
+      } else {
+        // Update main entity fields
+        await this.mainRepo.save({
+          id,
+          ...dto,
+        });
+      }
 
       return {
         message: MESSAGES.SUCCESS,

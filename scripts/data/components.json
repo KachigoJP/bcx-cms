@@ -1,0 +1,72 @@
+[
+  {
+    "id": "c1a2b3c4-1111-2222-3333-abcdefabcdef",
+    "name": "Banner",
+    "type": "banner",
+    "defaultConfig": {
+      "image": "/images/banner.jpg",
+      "link": "/",
+      "alt": "Main Banner"
+    },
+    "translations": [
+      {
+        "id": "t1a2b3c4-1111-2222-3333-abcdefabcdef",
+        "language": "en",
+        "name": "Banner",
+        "config": {
+          "alt": "Main Banner"
+        }
+      },
+      {
+        "id": "t1a2b3c4-1111-2222-3333-abcdefabcdea",
+        "language": "ja",
+        "name": "バナー",
+        "config": {
+          "alt": "メインバナー"
+        }
+      },
+      {
+        "id": "t1a2b3c4-1111-2222-3333-abcdefabcdeb",
+        "language": "vi",
+        "name": "Biểu ngữ",
+        "config": {
+          "alt": "Biểu ngữ chính"
+        }
+      }
+    ]
+  },
+  {
+    "id": "c1a2b3c4-1111-2222-3333-abcdefabcdea",
+    "name": "Text Block",
+    "type": "text-block",
+    "defaultConfig": {
+      "text": "Welcome to our website!"
+    },
+    "translations": [
+      {
+        "id": "t1a2b3c4-1111-2222-3333-abcdefabcdec",
+        "language": "en",
+        "name": "Text Block",
+        "config": {
+          "text": "Welcome to our website!"
+        }
+      },
+      {
+        "id": "t1a2b3c4-1111-2222-3333-abcdefabcded",
+        "language": "ja",
+        "name": "テキストブロック",
+        "config": {
+          "text": "私たちのウェブサイトへようこそ！"
+        }
+      },
+      {
+        "id": "t1a2b3c4-1111-2222-3333-abcdefabcdee",
+        "language": "vi",
+        "name": "Khối văn bản",
+        "config": {
+          "text": "Chào mừng đến với trang web của chúng tôi!"
+        }
+      }
+    ]
+  }
+]

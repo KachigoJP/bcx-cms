@@ -1,6 +1,32 @@
-import { MaxLength, IsNotEmpty, IsString } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { MaxLength, IsNotEmpty, IsString, IsOptional, IsArray, ValidateNested } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 import { MESSAGES } from '@messages/index';
+
+export class PageTranslationDto {
+  @IsString()
+  @IsNotEmpty()
+  language: string;
+
+  @IsString()
+  @IsOptional()
+  title?: string;
+
+  @IsString()
+  @IsOptional()
+  content?: string;
+}
+
+export class PageComponentDto {
+  @IsString()
+  @IsNotEmpty()
+  componentId: string;
+
+  @IsOptional()
+  order?: number;
+
+  @IsOptional()
+  config?: Record<string, any>;
+}
 
 export class CreateDto {
   @IsString()
@@ -45,4 +71,16 @@ export class CreateDto {
   })
   @Transform(({ value }) => value.trim())
   status: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PageTranslationDto)
+  @IsOptional()
+  translations?: PageTranslationDto[];
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PageComponentDto)
+  @IsOptional()
+  pageComponents?: PageComponentDto[];
 }
