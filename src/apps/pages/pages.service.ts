@@ -18,6 +18,8 @@ import { TagEntity } from '@apps/tags/entity';
 import { CreateDto, UpdateDto } from './dto';
 import { PageEntity } from './entity/index';
 import { LanguageEntity } from '@apps/languages/entity';
+import { PageComponentEntity } from './entity/page-component.entity';
+import { ComponentEntity } from './entity/component.entity';
 
 @Injectable()
 class MainService {
@@ -28,6 +30,10 @@ class MainService {
     private readonly categoryRepo: Repository<CategoryEntity>,
     @InjectRepository(LanguageEntity)
     private readonly langRepo: Repository<LanguageEntity>,
+    @InjectRepository(PageComponentEntity)
+    private readonly pageComponentRepo: Repository<PageComponentEntity>,
+    @InjectRepository(ComponentEntity)
+    private readonly componentRepo: Repository<ComponentEntity>,
   ) {}
 
   async initializeData(data) {
@@ -41,67 +47,12 @@ class MainService {
     await this.mainRepo.save(data);
   }
 
-  async findAll(query, language?: string) {
-    try {
-      const { page = 1, limit } = query;
-      const skip = (page - 1) * LIMIT_PAGE;
-
-      const [result, total] = await this.mainRepo.findAndCount({
-        order: { created_at: 'DESC' },
-        take: limit,
-        skip: skip,
-        relations: ['translations'],
-      });
-
-      // If language is specified, filter translations
-      const data = result.map((pageItem) => {
-        if (language && pageItem.translations) {
-          pageItem.translations = pageItem.translations.filter(
-            (t) => t.language === language,
-          );
-        }
-        return pageItem;
-      });
-
-      return {
-        data,
-        page,
-        pageSize: LIMIT_PAGE,
-        totalPage: Math.ceil(total / LIMIT_PAGE),
-        totalItem: total,
-      };
-    } catch (e) {
-      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
-  async findOne(id: string, language?: string) {
-    try {
-      const result = await this.mainRepo.findOne({
-        where: { id },
-        relations: ['translations'],
-      });
-
-      if (language && result && result.translations) {
-        result.translations = result.translations.filter(
-          (t) => t.language === language,
-        );
-      }
-
-      return {
-        data: result,
-        message: MESSAGES.SUCCESS,
-      };
-    } catch (e) {
-      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
-    }
-  }
-
   async create(dto: CreateDto, language?: string) {
     try {
       let page = this.mainRepo.create(dto);
+
+      // Handle translations
       if (language && dto.translations) {
-        // Only keep translation for the specified language
         page.translations = dto.translations
           .filter((t) => t.language === language)
           .map((t) =>
@@ -112,6 +63,7 @@ class MainService {
             }),
           );
       }
+
       await this.mainRepo.save(page);
 
       return {
@@ -126,7 +78,11 @@ class MainService {
     try {
       const entityFound = await this.mainRepo.findOne({
         where: { id },
-        relations: ['translations'],
+        relations: [
+          'translations',
+          'pageComponents',
+          'pageComponents.component',
+        ],
       });
 
       if (!entityFound)
@@ -164,6 +120,70 @@ class MainService {
       };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findAll(query, language?: string) {
+    try {
+      const { page = 1, limit } = query;
+      const skip = (page - 1) * LIMIT_PAGE;
+
+      const [result, total] = await this.mainRepo.findAndCount({
+        order: { created_at: 'DESC' },
+        take: limit,
+        skip: skip,
+        relations: [
+          'translations',
+          'pageComponents',
+          'pageComponents.component',
+        ],
+      });
+
+      // If language is specified, filter translations
+      const data = result.map((pageItem) => {
+        if (language && pageItem.translations) {
+          pageItem.translations = pageItem.translations.filter(
+            (t) => t.language === language,
+          );
+        }
+        return pageItem;
+      });
+
+      return {
+        data,
+        page,
+        pageSize: LIMIT_PAGE,
+        totalPage: Math.ceil(total / LIMIT_PAGE),
+        totalItem: total,
+      };
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findOne(id: string, language?: string) {
+    try {
+      const result = await this.mainRepo.findOne({
+        where: { id },
+        relations: [
+          'translations',
+          'pageComponents',
+          'pageComponents.component',
+        ],
+      });
+
+      if (language && result && result.translations) {
+        result.translations = result.translations.filter(
+          (t) => t.language === language,
+        );
+      }
+
+      return {
+        data: result,
+        message: MESSAGES.SUCCESS,
+      };
+    } catch (e) {
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
 

@@ -13,7 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 // Source
 import { LIMIT_PAGE } from '../../config/constants';
 import { CreateDto, UpdateDto } from './dto';
-import { SEOEntity } from './entity/seo.entity';
+import { SeoEntity } from './entity/seo.entity';
 
 // Sample Data
 import * as SampleData from '../../../test/data/page_categories.json';
@@ -22,13 +22,13 @@ import { MESSAGES } from '@messages/index';
 @Injectable()
 class MainService {
   constructor(
-    @InjectRepository(SEOEntity)
-    private readonly mainRepo: Repository<SEOEntity>,
+    @InjectRepository(SeoEntity)
+    private readonly mainRepo: Repository<SeoEntity>,
   ) {}
 
   async onModuleInit() {
     try {
-      this.mainRepo.save(SampleData as unknown as SEOEntity);
+      this.mainRepo.save(SampleData as unknown as SeoEntity);
     } catch (ex) {
       console.error(ex);
     }

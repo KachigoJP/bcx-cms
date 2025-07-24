@@ -2,12 +2,12 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // Source
-import { SEOEntity } from './entity/index';
+import { SeoEntity } from './entity/index';
 import MainService from './seo.service';
 import MainController from './seo.controller';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([SEOEntity])],
+  imports: [TypeOrmModule.forFeature([SeoEntity])],
   controllers: [MainController],
   providers: [MainService],
 })

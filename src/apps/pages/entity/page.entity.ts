@@ -89,9 +89,6 @@ export class PageEntity extends BaseEntity {
   @JoinColumn()
   seo: SeoEntity;
 
-  @OneToMany(() => PageComponentEntity, (pc) => pc.page, {
-    cascade: true,
-    eager: true,
-  })
+  @OneToMany(() => PageComponentEntity, (pc) => pc.page, { cascade: true, eager: true })
   pageComponents: PageComponentEntity[];
 }

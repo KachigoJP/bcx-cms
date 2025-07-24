@@ -7,8 +7,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { PageComponentEntity } from './page-component.entity';
-import { ComponentTranslationEntity } from './component-translation.entity';
+import { PageComponentEntity } from '../../pages/entity/page-component.entity';
 
 @Entity({ name: 'components' })
 export class ComponentEntity extends BaseEntity {
@@ -19,7 +18,7 @@ export class ComponentEntity extends BaseEntity {
   name: string;
 
   @Column({ type: 'varchar', length: 255, unique: true })
-  type: string; // e.g., 'banner', 'text-block', etc.
+  type: string;
 
   @Column({ type: 'jsonb', nullable: true })
   defaultConfig: Record<string, any>;
@@ -32,11 +31,4 @@ export class ComponentEntity extends BaseEntity {
 
   @OneToMany(() => PageComponentEntity, (pc) => pc.component)
   pageComponents: PageComponentEntity[];
-
-  @OneToMany(
-    () => ComponentTranslationEntity,
-    (translation) => translation.component,
-    { cascade: true },
-  )
-  translations: ComponentTranslationEntity[];
 }

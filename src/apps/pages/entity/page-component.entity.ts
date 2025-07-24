@@ -6,21 +6,15 @@ import {
   BaseEntity,
   JoinColumn,
   OneToMany,
-  Index,
 } from 'typeorm';
 import { PageEntity } from './page.entity';
-import { ComponentEntity } from './component.entity';
+import { ComponentEntity } from 'src/apps/component/entity/component.entity';
+import { PageComponentTranslationEntity } from './page-component-translation.entity';
 
 @Entity({ name: 'page_components' })
-@Index('IDX_PAGE_ID', ['page'])
-@Index('IDX_COMPONENT_ID', ['component'])
-@Index('IDX_ORDER', ['order'])
 export class PageComponentEntity extends BaseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Column({ type: 'int', nullable: false, default: 0 })
-  order: number;
 
   @ManyToOne(() => PageEntity, (page) => page.pageComponents, {
     onDelete: 'CASCADE',
@@ -28,10 +22,22 @@ export class PageComponentEntity extends BaseEntity {
   @JoinColumn({ name: 'page_id' })
   page: PageEntity;
 
+  @Column({ type: 'int', nullable: false, default: 0 })
+  order: number;
+
+  @Column({ type: 'jsonb', nullable: true })
+  config: Record<string, any>;
+
   @ManyToOne(() => ComponentEntity, (component) => component.pageComponents, {
     eager: true,
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'component_id' })
   component: ComponentEntity;
+
+  @OneToMany(
+    () => PageComponentTranslationEntity,
+    (translation) => translation.pageComponent,
+    { cascade: true },
+  )
+  translations: PageComponentTranslationEntity[];
 }
