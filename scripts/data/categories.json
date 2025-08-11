@@ -1,79 +1,79 @@
 [
   {
-    "id": "b7e8a1c2-1f2a-4c3d-9e5f-1234567890ab",
-    "slug": "technology",
+    "id": "cat-1",
+    "slug": "hanh-trinh",
     "type": "blog",
-    "providerId": "a8e6f059-9927-4544-97ea-ef404a4a30f9",
+    "providerId": "provider-1",
     "translations": [
       {
-        "id": "e1a1b2c3-1111-2222-3333-1234567890ab",
+        "id": "cat-1-en",
         "language": "en",
-        "name": "Technology",
-        "description": "All about technology."
+        "name": "Journey",
+        "description": "All about journeys."
       },
       {
-        "id": "e1a1b2c3-1111-2222-3333-1234567890ad",
+        "id": "cat-1-ja",
         "language": "ja",
-        "name": "テクノロジー",
-        "description": "テクノロジーに関するすべて。"
+        "name": "旅程",
+        "description": "旅程に関するすべて。"
       },
       {
-        "id": "e1a1b2c3-1111-2222-3333-1234567890ae",
+        "id": "cat-1-vi",
         "language": "vi",
-        "name": "Công nghệ",
-        "description": "Tất cả về công nghệ."
+        "name": "Hành Trình",
+        "description": "Tất cả về hành trình."
       }
     ]
   },
   {
-    "id": "c3d9e5f1-2a4b-4c5d-8e7f-abcdef123456",
-    "slug": "sports",
+    "id": "cat-2",
+    "slug": "tin-tuc",
     "type": "blog",
-    "providerId": "a8e6f059-9927-4544-97ea-ef404a4a30f9",
+    "providerId": "provider-1",
     "translations": [
       {
-        "id": "e1a1b2c3-1111-2222-3333-abcdef123451",
+        "id": "cat-2-en",
         "language": "en",
-        "name": "Sports",
-        "description": "All about sports."
+        "name": "News",
+        "description": "All about news."
       },
       {
-        "id": "e1a1b2c3-1111-2222-3333-abcdef123453",
+        "id": "cat-2-ja",
         "language": "ja",
-        "name": "スポーツ",
-        "description": "スポーツに関するすべて。"
+        "name": "ニュース",
+        "description": "ニュースに関するすべて。"
       },
       {
-        "id": "e1a1b2c3-1111-2222-3333-abcdef123454",
+        "id": "cat-2-vi",
         "language": "vi",
-        "name": "Thể thao",
-        "description": "Tất cả về thể thao."
+        "name": "Tin Tức",
+        "description": "Tất cả về tin tức."
       }
     ]
   },
   {
-    "id": "d1e2f3a4-5b6c-7d8e-9f01-234567890abc",
-    "slug": "about-us",
-    "type": "page",
-    "providerId": "a8e6f059-9927-4544-97ea-ef404a4a30f9",
+    "id": "cat-3",
+    "slug": "su-kien",
+    "type": "blog",
+    "providerId": "provider-1",
     "translations": [
       {
-        "id": "f1a2b3c4-5555-6666-7777-1234567890ab",
+        "id": "cat-3-en",
         "language": "en",
-        "name": "About Us",
-        "description": "Information about our company."
+        "name": "Event",
+        "description": "All about events."
       },
       {
-        "id": "f1a2b3c4-5555-6666-7777-1234567890ad",
+        "id": "cat-3-ja",
         "language": "ja",
-        "name": "私たちについて",
-        "description": "私たちの会社についての情報。"
+        "name": "イベント",
+        "description": "イベントに関するすべて。"
       },
       {
-        "id": "f1a2b3c4-5555-6666-7777-1234567890ae",
+        "id": "cat-3-vi",
         "language": "vi",
-        "name": "Về chúng tôi",
-        "description": "Thông tin về công ty của chúng tôi."
+        "name": "Sự Kiện",
+        "description": "Tất cả về sự kiện."
       }
     ]
   }

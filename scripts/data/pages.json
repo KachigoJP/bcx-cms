@@ -5,15 +5,12 @@
     "slug": "about-us",
     "content": null,
     "photo": null,
-    "status": "published",
+    "status": "draft",
     "created_at": "2024-01-01T00:00:00.000Z",
     "updated_at": "2024-01-01T00:00:00.000Z",
     "deleted_at": null,
     "provider": {
       "id": "a8e6f059-9927-4544-97ea-ef404a4a30f9"
-    },
-    "category": {
-      "id": "d1e2f3a4-5b6c-7d8e-9f01-234567890abc"
     },
     "translations": [
       {
@@ -41,21 +38,6 @@
       "metaDescription": "Learn more about our company, mission, and values.",
       "metaKeywords": "about us, company, mission, values"
     },
-    "pageComponents": [
-      {
-        "id": "pc-1",
-        "component": {
-          "id": "c1a2b3c4-1111-2222-3333-abcdefabcdef"
-        },
-        "order": 1
-      },
-      {
-        "id": "pc-2",
-        "component": {
-          "id": "c1a2b3c4-1111-2222-3333-abcdefabcdea"
-        },
-        "order": 2
-      }
-    ]
+    "pageComponents": []
   }
 ]

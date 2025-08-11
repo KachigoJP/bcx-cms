@@ -19,7 +19,7 @@ import { CreateDto, UpdateDto } from './dto';
 import { PageEntity } from './entity/index';
 import { LanguageEntity } from '@apps/languages/entity';
 import { PageComponentEntity } from './entity/page-component.entity';
-import { ComponentEntity } from './entity/component.entity';
+import { ComponentEntity } from '@apps/component/entity/component.entity';
 
 @Injectable()
 class MainService {

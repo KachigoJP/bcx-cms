@@ -18,10 +18,8 @@ import {
 // Source
 import { PUBLISH_STATUS } from '@utils/enum/publish_status.enum';
 import ProviderEntity from '@apps/providers/entity/provider.entity';
-import { CategoryEntity } from '@apps/categories/entity';
 import { LanguageEntity } from '@apps/languages/entity';
 import { UserEntity } from '@apps/user/entities/user.entity';
-import { TagEntity } from '@apps/tags/entity';
 import { PageTranslationEntity } from './page-translation.entity';
 import { SeoEntity } from '@apps/seo/entity/seo.entity';
 import { PageComponentEntity } from './page-component.entity';
@@ -76,10 +74,6 @@ export class PageEntity extends BaseEntity {
   @JoinColumn()
   provider: ProviderEntity;
 
-  @ManyToOne(() => CategoryEntity, { nullable: true })
-  @JoinColumn()
-  category: CategoryEntity;
-
   @OneToMany(() => PageTranslationEntity, (translation) => translation.page, {
     cascade: true,
   })
@@ -89,6 +83,9 @@ export class PageEntity extends BaseEntity {
   @JoinColumn()
   seo: SeoEntity;
 
-  @OneToMany(() => PageComponentEntity, (pc) => pc.page, { cascade: true, eager: true })
+  @OneToMany(() => PageComponentEntity, (pc) => pc.page, {
+    cascade: true,
+    eager: true,
+  })
   pageComponents: PageComponentEntity[];
 }
